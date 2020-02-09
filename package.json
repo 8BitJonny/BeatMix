@@ -11,10 +11,14 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
-    "nuxt": "^2.0.0",
+    "@nuxtjs/axios": "^5.3.6",
+    "axios": "^0.19.2",
+    "cookie-parser": "^1.4.4",
     "cross-env": "^5.2.0",
+    "crypto-js": "^3.1.9-1",
     "express": "^4.16.4",
-    "@nuxtjs/axios": "^5.3.6"
+    "nuxt": "^2.0.0",
+    "querystring": "^0.2.0"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",

@@ -1,13 +1,32 @@
 <template>
   <div>
-    <label for="search" class="label">Search</label>
-    <input id="search" class="input" ref="input" type="text" placeholder='Press "/" to focus'>
+    <label
+      for="search"
+      class="label"
+    >
+      Search
+    </label>
+    <input
+      id="search"
+      class="input"
+      ref="input"
+      type="text"
+      placeholder='Press "/" to focus'
+      v-on="$listeners"
+      :value="value"
+      @input="$emit('update', $event.target.value)"
+    >
   </div>
 </template>
 
 <script>
 export default {
   name: "Search",
+  props: ["value"],
+  model: {
+    prop: "value",
+    event: "update"
+  },
   mounted() {
     window.addEventListener('keyup', (event) => {
       if (event.key === "/") {
