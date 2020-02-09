@@ -66,7 +66,7 @@ export default {
     },
     searchArtists: function(artistName) {
       if (artistName === "") {
-        this.options = null;
+        this.options = [];
         return
       }
       this.loading = true;
