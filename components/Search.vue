@@ -20,7 +20,7 @@
           :loading="loading"
           :options="options"
           :closeOnSelect=false
-          @select="options = []"
+          @select="() => { this.options = []; this.playlistURL = null }"
           @search-change="delayedInput"
           placeholder='Press "/" to focus'
         >
@@ -28,7 +28,13 @@
         </multiselect>
       </div>
     </div>
-    <button v-if="value.length > 0" @click="createPlaylist" class="createButton">Create Playlist</button>
+    <span
+      v-if="playlistURL"
+    >
+      Successfully created your Playlist. Look into your Spotify Account or open via this
+      <a :href=playlistURL>link</a>.
+    </span>
+    <button v-else-if="value.length > 0" @click="createPlaylist" class="createButton">Create Playlist</button>
     <div class="searchResults">
       <img v-for="result in value" :src="result.images[0].url" width="180" height="180"/>
     </div>
@@ -52,6 +58,7 @@ export default {
       value: [],
       options: [],
       loading: false,
+      playlistURL: null
     }
   },
   methods: {
@@ -82,6 +89,7 @@ export default {
     },
     createPlaylist: async function () {
       try {
+        this.playlistURL = null;
         let albumPromises = [],
           albums = [],
           tracks = [];
@@ -114,7 +122,8 @@ export default {
           trackIndex += end;
         }
 
-        await Promise.all(addTrackPromises)
+        await Promise.all(addTrackPromises);
+        this.playlistURL = newPlaylist.data.external_urls.spotify
       } catch(err) {
         console.log("Error: ", err)
       }
@@ -178,5 +187,9 @@ export default {
   .createButton {
     background-color: #1DB954;
     @apply mt-4 px-2 py-1 rounded-md
+  }
+  a {
+    color: #1DB954;
+    text-decoration: underline;
   }
 </style>
