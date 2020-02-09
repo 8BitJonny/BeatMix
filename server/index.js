@@ -47,7 +47,7 @@ function login(req, res) {
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
 
-  const scope = 'user-read-private user-read-email';
+  const scope = 'user-read-private user-read-email playlist-modify-public';
   res.redirect('https://accounts.spotify.com/authorize?' +
     querystring.stringify({
       response_type: 'code',
@@ -80,7 +80,6 @@ function authCallback(req, res) {
 
     axios.post('https://accounts.spotify.com/api/token', params, { headers })
       .then(result => {
-        console.log(result.data);
         res.cookie(tokenKey, result.data.access_token);
         res.cookie(refreshKey, result.data.refresh_token);
         res.redirect("/")

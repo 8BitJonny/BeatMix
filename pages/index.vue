@@ -7,6 +7,7 @@
       </h1>
       <Search
         @click="checkAuth"
+        :userId="user.id"
       />
     </div>
   </div>
@@ -20,7 +21,8 @@ export default {
   data: () => {
     return {
       user: {
-        image: null
+        image: null,
+        id: null
       }
     }
   },
@@ -29,12 +31,14 @@ export default {
     NavBar
   },
   methods: {
-    checkAuth: () => {
-      location.assign("/login")
+    checkAuth: function() {
+      if (!this.cookies['spotify_auth_token']) {
+        location.assign("/login")
+      }
     }
   },
   computed: {
-    cookies: () => {
+    cookies: function() {
       const pairs = document.cookie.split(";");
       let cookies = {};
       for (let i=0; i<pairs.length; i++){
@@ -44,21 +48,22 @@ export default {
       return cookies;
     }
   },
-  mounted() {
+  mounted: function() {
     if (this.cookies['spotify_auth_token']) {
       this.$axios.$get('https://api.spotify.com/v1/me',
         { headers: {
           'Authorization': 'Bearer ' + this.cookies['spotify_auth_token']
         }}
       ).then(result => {
-        this.user.image = result.images[0].url
-        //console.log(this.user.image)
+        this.user.image = result.images[0].url;
+        this.user.id = result.id;
       })
     }
   }
 }
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css" />
 <style>
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 

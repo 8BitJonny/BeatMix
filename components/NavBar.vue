@@ -3,7 +3,7 @@
     <img src="Spotify.png" class="logo"/>
     <div class="linkList">
       <span>Home</span>
-      <span v-if="!userPicture">Login</span>
+      <span v-if="!userPicture" @click="login">Login</span>
       <span>About</span>
       <img src="Github.png" class="h-10"/>
       <img v-if="userPicture" :src="userPicture" class="userPicture" alt="">
@@ -17,8 +17,10 @@ export default {
   props: {
     userPicture: String,
   },
-  mounted() {
-    console.log(this.userPicture)
+  methods: {
+    login: function() {
+      location.assign("/login")
+    }
   }
 }
 </script>

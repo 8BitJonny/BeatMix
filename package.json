@@ -18,7 +18,8 @@
     "crypto-js": "^3.1.9-1",
     "express": "^4.16.4",
     "nuxt": "^2.0.0",
-    "querystring": "^0.2.0"
+    "querystring": "^0.2.0",
+    "vue-multiselect": "^2.1.6"
   },
   "devDependencies": {
     "nodemon": "^1.18.9",
