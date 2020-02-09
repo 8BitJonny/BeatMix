@@ -4,8 +4,16 @@ const { Nuxt, Builder } = require('nuxt')
 const app = express()
 
 // Import and Set Nuxt.js options
-const config = require('../nuxt.config.js')
-config.dev = process.env.NODE_ENV !== 'production'
+const config = require('../nuxt.config.js');
+config.dev = process.env.NODE_ENV !== 'production';
+
+const redirect_uri = 'http://localhost:3000/auth/callback';
+const client_id = '9af8e00f395c488b9e39f573e06c22ae';
+const client_secret = process.env.CLIENT_SECRET;
+
+const stateKey = 'spotify_auth_state';
+const tokenKey = 'spotify_auth_token';
+const refreshKey = 'spotify_auth_refresh';
 
 async function start () {
   // Init Nuxt.js

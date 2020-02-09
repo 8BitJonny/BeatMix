@@ -15,6 +15,9 @@ module.exports = {
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
     ]
   },
+  env: {
+    CLIENT_SECRET: process.env.CLIENT_SECRET
+  },
   /*
   ** Customize the progress-bar color
   */
