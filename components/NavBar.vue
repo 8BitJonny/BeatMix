@@ -1,12 +1,16 @@
 <template>
   <div class="navbar">
-    <img src="Spotify.png" class="logo"/>
+    <nuxt-link to="/">
+      <img src="Spotify.png" class="logo"/>
+    </nuxt-link>
     <div class="linkList">
-      <span>Home</span>
+      <nuxt-link to="/">Home</nuxt-link>
       <span v-if="!userPicture" @click="login">Login</span>
       <span>About</span>
       <span v-if="userPicture" @click="logout">Logout</span>
-      <img src="Github.png" class="h-10"/>
+      <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer">
+        <img src="Github.png" class="h-10"/>
+      </a>
       <img v-if="userPicture" :src="userPicture" class="userPicture" alt="">
     </div>
   </div>
@@ -30,9 +34,6 @@ export default {
 </script>
 
 <style scoped>
-span {
-  @apply font-semibold text-xl
-}
 .navbar {
   @apply py-6 px-8 flex justify-between
 }
@@ -41,6 +42,12 @@ span {
 }
 .linkList > * {
   @apply mx-4
+}
+.linkList > a, span {
+  @apply font-semibold text-xl cursor-pointer
+}
+.linkList > a:hover, span:hover {
+  @apply underline
 }
 .logo {
   @apply h-12
