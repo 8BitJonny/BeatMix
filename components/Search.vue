@@ -1,5 +1,17 @@
 <template>
-  <div>
+  <div class="flex flex-col">
+    <div
+      v-if="playlistURL"
+      class="mb-12 -mt-8"
+    >
+      <span>
+        Successfully created your Playlist.<br>Look into your Spotify Account or open via this
+        <a :href=playlistURL>link</a>.
+      </span>
+    </div>
+    <div v-if="!playlistURL && value.length > 0" class="buttonWrapper">
+      <button @click="createPlaylist" class="createButton">Create Playlist</button>
+    </div>
     <div class="searchContainer">
       <label
         for="search"
@@ -28,13 +40,6 @@
         </multiselect>
       </div>
     </div>
-    <span
-      v-if="playlistURL"
-    >
-      Successfully created your Playlist. Look into your Spotify Account or open via this
-      <a :href=playlistURL>link</a>.
-    </span>
-    <button v-else-if="value.length > 0" @click="createPlaylist" class="createButton">Create Playlist</button>
     <div class="searchResults">
       <img v-for="result in value" :src="result.images[0].url" width="180" height="180"/>
     </div>
@@ -182,11 +187,16 @@ export default {
     @apply flex flex-wrap justify-center
   }
   .searchResults > * {
+    width: 180px;
+    height: 180px;
     @apply p-4
   }
   .createButton {
     background-color: #1DB954;
-    @apply mt-4 px-2 py-1 rounded-md
+    @apply px-2 py-1 rounded-md
+  }
+  .buttonWrapper {
+    @apply -mt-12 mb-8
   }
   a {
     color: #1DB954;
