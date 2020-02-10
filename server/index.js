@@ -10,7 +10,7 @@ const app = express();
 const config = require('../nuxt.config.js');
 config.dev = process.env.NODE_ENV !== 'production';
 
-const redirect_uri = 'http://localhost:3000/auth/callback';
+let redirect_uri = null;
 const client_id = '9af8e00f395c488b9e39f573e06c22ae';
 const client_secret = process.env.CLIENT_SECRET;
 
@@ -53,6 +53,7 @@ start();
 function login(req, res) {
   const state = generateRandomString(16);
   res.cookie(stateKey, state);
+  redirect_uri = req.query.redirect_uri;
 
   const scope = 'user-read-private user-read-email playlist-modify-public';
   res.redirect('https://accounts.spotify.com/authorize?' +
@@ -60,7 +61,7 @@ function login(req, res) {
       response_type: 'code',
       client_id: client_id,
       scope: scope,
-      redirect_uri: redirect_uri,
+      redirect_uri,
       state: state
     }));
 }
@@ -96,9 +97,10 @@ function authCallback(req, res) {
     // Proper Error Handling
   } else {
     res.clearCookie(stateKey);
+    console.log("R", redirect_uri);
     const params = querystring.stringify({
       code: code,
-      redirect_uri: redirect_uri,
+      redirect_uri,
       grant_type: 'authorization_code'
     });
 

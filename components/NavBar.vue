@@ -24,10 +24,13 @@ export default {
   },
   methods: {
     login: function() {
-      location.assign("/login")
+      location.assign(`/login?redirect_uri=${this.getBaseUrl()}/auth/callback`)
     },
     logout: function() {
       location.assign("/logout")
+    },
+    getBaseUrl() {
+      return `${window.location.protocol}//${window.location.host}`
     }
   }
 }

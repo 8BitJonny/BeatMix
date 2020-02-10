@@ -33,8 +33,11 @@ export default {
   methods: {
     checkAuth: function() {
       if (!this.cookies['spotify_auth_token']) {
-        location.assign("/login")
+        location.assign(`/login?redirect_uri=${this.getBaseUrl()}/auth/callback`)
       }
+    },
+    getBaseUrl() {
+      return `${window.location.protocol}//${window.location.host}`
     }
   },
   computed: {
