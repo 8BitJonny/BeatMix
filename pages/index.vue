@@ -57,6 +57,10 @@ export default {
       ).then(result => {
         this.user.image = result.images[0].url;
         this.user.id = result.id;
+      }).catch(err => {
+        if (err.response.data.error.message === 'The access token expired') {
+          location.assign("/refreshToken")
+        }
       })
     }
   }

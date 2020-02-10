@@ -14,6 +14,11 @@ const redirect_uri = 'http://localhost:3000/auth/callback';
 const client_id = '9af8e00f395c488b9e39f573e06c22ae';
 const client_secret = process.env.CLIENT_SECRET;
 
+const headers = {
+  'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')),
+  'Content-Type': 'application/x-www-form-urlencoded'
+};
+
 const stateKey = 'spotify_auth_state';
 const tokenKey = 'spotify_auth_token';
 const refreshKey = 'spotify_auth_refresh';
@@ -31,6 +36,8 @@ async function start () {
   app.use(cookieParser());
 
   app.get("/login", login);
+  app.get("/logout", logout);
+  app.get("/refreshToken", refreshToken);
   app.get("/auth/callback", authCallback);
 
   app.use(nuxt.render);
@@ -58,6 +65,28 @@ function login(req, res) {
     }));
 }
 
+function logout(req, res) {
+  res.clearCookie(tokenKey);
+  res.clearCookie(refreshKey);
+  res.redirect("/");
+}
+
+function refreshToken(req, res) {
+  const params = querystring.stringify({
+    grant_type: 'refresh_token',
+    refresh_token: req.cookies[refreshKey]
+  });
+
+  axios.post('https://accounts.spotify.com/api/token', params, { headers })
+    .then(result => {
+      res.cookie(tokenKey, result.data.access_token);
+      res.redirect("/")
+    }).catch(err => {
+      console.error(err);
+      res.send()
+    });
+}
+
 function authCallback(req, res) {
   const code = req.query.code || null;
   const state = req.query.state || null;
@@ -72,11 +101,6 @@ function authCallback(req, res) {
       redirect_uri: redirect_uri,
       grant_type: 'authorization_code'
     });
-
-    const headers = {
-      'Authorization': 'Basic ' + (new Buffer(client_id + ':' + client_secret).toString('base64')),
-      'Content-Type': 'application/x-www-form-urlencoded'
-    };
 
     axios.post('https://accounts.spotify.com/api/token', params, { headers })
       .then(result => {

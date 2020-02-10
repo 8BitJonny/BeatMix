@@ -5,6 +5,7 @@
       <span>Home</span>
       <span v-if="!userPicture" @click="login">Login</span>
       <span>About</span>
+      <span v-if="userPicture" @click="logout">Logout</span>
       <img src="Github.png" class="h-10"/>
       <img v-if="userPicture" :src="userPicture" class="userPicture" alt="">
     </div>
@@ -20,6 +21,9 @@ export default {
   methods: {
     login: function() {
       location.assign("/login")
+    },
+    logout: function() {
+      location.assign("/logout")
     }
   }
 }
