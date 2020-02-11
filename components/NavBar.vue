@@ -9,7 +9,7 @@
       <span>About</span>
       <span v-if="userPicture" @click="logout">Logout</span>
       <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer">
-        <img src="Github.png" class="h-10"/>
+        <img src="GitHub.png" class="h-10"/>
       </a>
       <img v-if="userPicture" :src="userPicture" class="userPicture" alt="">
     </div>
