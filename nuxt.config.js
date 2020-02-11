@@ -41,6 +41,7 @@ module.exports = {
   */
   plugins: [
     { src: '~/plugins/spotifyAPI', ssr: true },
+    { src: '~/plugins/vueNotify', ssr: true }
   ],
   /*
   ** Nuxt.js dev-modules

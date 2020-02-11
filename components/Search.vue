@@ -72,15 +72,26 @@ export default {
       this.timer = 0;
 
       this.timer = setTimeout(() => {
-        this.searchArtists.bind(this, event)();
-        this.$emit('update', event)
+        if (event === "") {
+          this.options = [];
+          return
+        }
+
+        if (this.userId) {
+          this.searchArtists.bind(this, event)();
+          this.$emit('update', event)
+        } else {
+          this.$notify({
+            duration: 2000,
+            type: 'error',
+            group: 'error',
+            text: 'You need to login with your Spotify account first.'
+          })
+        }
+
       }, 250)
     },
     searchArtists: function(artistName) {
-      if (artistName === "") {
-        this.options = [];
-        return
-      }
       this.loading = true;
       this.$spotifyApi.search(this.cookies['spotify_auth_token'], artistName)
         .then(result => {
