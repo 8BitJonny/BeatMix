@@ -1,14 +1,5 @@
 <template>
   <div class="flex flex-col">
-    <div
-      v-if="playlistURL"
-      class="mb-12 -mt-8"
-    >
-      <span>
-        Successfully created your Playlist.<br>Look into your Spotify Account or open via this
-        <a :href=playlistURL>link</a>.
-      </span>
-    </div>
     <div class="searchContainer">
       <label
         for="search"
@@ -29,7 +20,7 @@
           :loading="loading"
           :options="options"
           :closeOnSelect=false
-          @select="() => { this.options = []; this.playlistURL = null }"
+          @select="() => { this.options = []; this.success = null }"
           @search-change="delayedInput"
           placeholder='Press "/" to focus'
         >
@@ -64,7 +55,7 @@
         </div>
       </div>
     </div>
-    <div v-if="!playlistURL && value.length > 0" class="buttonWrapper">
+    <div v-if="!success && value.length > 0" class="buttonWrapper">
       <button @click="createPlaylist" class="createButton">Create Playlist</button>
     </div>
   </div>
@@ -87,7 +78,7 @@ export default {
       value: [],
       options: [],
       loading: false,
-      playlistURL: null
+      success: null
     }
   },
   methods: {
@@ -106,7 +97,7 @@ export default {
           this.$emit('update', event)
         } else {
           this.$notify({
-            duration: 2000,
+            duration: 3000,
             type: 'error',
             group: 'error',
             text: 'You need to login with your Spotify account first.'
@@ -163,7 +154,14 @@ export default {
         }
 
         await Promise.all(addTrackPromises);
-        this.playlistURL = newPlaylist.data.external_urls.spotify
+
+        this.success = true;
+        this.$notify({
+          duration: 3000,
+          type: 'success',
+          group: 'success',
+          text: newPlaylist.data.external_urls.spotify
+        });
       } catch(err) {
         console.log("Error: ", err)
       }
