@@ -109,7 +109,7 @@ body {
 .title {
   display: block;
   letter-spacing: 1px;
-  @apply font-semibold text-6xl mb-16
+  @apply font-semibold text-6xl mb-12
 }
 
 .vue-notification {
