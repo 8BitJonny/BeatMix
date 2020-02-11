@@ -189,11 +189,12 @@ export default {
   .searchResults > * {
     width: 180px;
     height: 180px;
-    @apply p-4
+    box-shadow: 0 4px 4px #000000;
+    @apply m-4
   }
   .createButton {
     background-color: #1DB954;
-    @apply px-2 py-1 rounded-md
+    @apply px-4 py-2 rounded-md
   }
   .buttonWrapper {
     @apply -mt-12 mb-8
