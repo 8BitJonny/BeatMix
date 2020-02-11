@@ -157,11 +157,11 @@ export default {
     }
   },
   mounted() {
-    //window.addEventListener('keyup', (event) => {
-    //  if (event.key === "/") {
-    //    this.$refs.search.focus();
-    //  }
-    //})
+    window.addEventListener('keyup', (event) => {
+      if (event.key === "/" && !this.$refs.search.isOpen) {
+        document.querySelector('.searchContainer input').focus();
+      }
+    })
   }
 }
 </script>
