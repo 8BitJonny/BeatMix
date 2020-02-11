@@ -26,7 +26,16 @@ module.exports = {
   ** Global CSS
   */
   css: [
+    'vue-multiselect/dist/vue-multiselect.min.css'
   ],
+  purgeCSS: {
+    whitelistPatterns: [
+      /-(leave|enter|appear)(|-(to|from|active))$/,
+      /^(?!(|.*?:)cursor-move).+-move$/,
+      /^nuxt-link(|-exact)-active$/,
+      /multiselect/
+    ]
+  },
   /*
   ** Plugins to load before mounting the App
   */
