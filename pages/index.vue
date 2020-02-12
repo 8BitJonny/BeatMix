@@ -72,7 +72,7 @@ export default {
           'Authorization': 'Bearer ' + this.cookies['spotify_auth_token']
         }}
       ).then(result => {
-        this.user.image = result.images[0].url;
+        this.user.image = result.images.length > 0 ? result.images[0].url : 'default';
         this.user.id = result.id;
       }).catch(err => {
         if (err.response.data.error.message === 'The access token expired') {

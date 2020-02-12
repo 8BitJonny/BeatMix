@@ -11,16 +11,24 @@
       <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer">
         <img src="GitHub.png" class="h-10"/>
       </a>
-      <img v-if="userPicture" :src="userPicture" class="userPicture" alt="">
+      <div v-if="userPicture">
+        <img v-if="userPicture !== 'default'" :src="userPicture" class="userPicture" alt="">
+        <DefaultUserImage v-else class="userPicture"/>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import DefaultUserImage from "~/components/defaultUserImage";
+
 export default {
   name: "NavBar",
   props: {
     userPicture: String,
+  },
+  components: {
+    DefaultUserImage
   },
   methods: {
     login: function() {
