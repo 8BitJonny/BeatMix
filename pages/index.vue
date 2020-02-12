@@ -1,11 +1,11 @@
 <template>
   <div class="content">
-    <notifications group="error">
+    <notifications width="434px" position="top center" group="error">
       <template slot="body" slot-scope="props">
         <ErrorMessage :text="props.item.text" />
       </template>
     </notifications>
-    <notifications group="success">
+    <notifications width="350px" position="top center" group="success">
       <template slot="body" slot-scope="props">
         <SuccessMessage />
       </template>
@@ -108,13 +108,8 @@ body {
 
 .vue-notification {
   padding: 0.7rem;
-  top: 0.6rem;
   color: #fff;
-  position: absolute;
-  left: 50%;
-  -webkit-transform: translateX(-50%);
-  transform: translateX(-50%);
-  margin-top: 15px;
+  margin-top: 21px;
   border-radius: 4px;
   font-size: 16px;
   display: flex;
