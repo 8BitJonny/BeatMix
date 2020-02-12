@@ -135,6 +135,14 @@ export default {
         let trackResponse = await this.$spotifyApi.getSeveralAlbums(this.cookies['spotify_auth_token'], albums.map(album => album.id).slice(0,20));
         trackResponse.data.albums.forEach(albums => tracks.push(...albums.tracks.items));
 
+        //Filter out the tracks which don't have any of the artists that are in the searchQuery
+        tracks = tracks.filter(track =>
+          track.artists.some(artist =>
+            this.value.some(v =>
+              v.id === artist.id
+            )
+          )
+        );
 
         tracks = tracks.map(el => {
           el.duration_ms = Math.floor(el.duration_ms / 1000);
