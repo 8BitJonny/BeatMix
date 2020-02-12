@@ -13,7 +13,7 @@
     <NavBar :userPicture="user.image" />
     <div class="container">
       <h1 class="title">
-        Spotify Music Mixer
+        Spotify Artist Mixer
       </h1>
       <Search
         @click="checkAuth"

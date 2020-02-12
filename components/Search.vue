@@ -37,21 +37,9 @@
     <div v-else>
       <p class="text-3xl mt-12 -mb-8 ml-4 text-left">Suggestions</p>
       <div class="searchResults">
-        <div>
-          <img src="https://artwork-cdn.7static.com/static/img/sleeveart/00/079/320/0007932086_350.jpg" width="180" height="180"/>
-          <p>Aviva</p>
-        </div>
-        <div>
-          <img src="https://i.scdn.co/image/56f4762485066b4ef867b96e16775f2b5b4db277" width="180" height="180"/>
-          <p>Eminem</p>
-        </div>
-        <div>
-          <img src="https://i.scdn.co/image/3e56ba003140ad30e8aa5d35c2db603592d4d690" width="180" height="180"/>
-          <p>The Seige</p>
-        </div>
-        <div>
-          <img src="https://i.scdn.co/image/afb7fb59a35df2e6d8e3e7b7c80ac5fa8b2434a5" width="180" height="180"/>
-          <p>Onk Lou</p>
+        <div v-for="suggestion in suggestions">
+          <img :src="suggestion.img" width="180" height="180"/>
+          <p>{{ suggestion.name }}</p>
         </div>
       </div>
     </div>
@@ -78,7 +66,22 @@ export default {
       value: [],
       options: [],
       loading: false,
-      success: null
+      success: null,
+      suggestions: [
+        {
+          name: 'AViVA',
+          img: 'https://artwork-cdn.7static.com/static/img/sleeveart/00/079/320/0007932086_350.jpg'
+        }, {
+          name: 'Eminem',
+          img: 'https://i.scdn.co/image/56f4762485066b4ef867b96e16775f2b5b4db277'
+        }, {
+          name: 'The Seige',
+          img: 'https://i.scdn.co/image/3e56ba003140ad30e8aa5d35c2db603592d4d690'
+        }, {
+          name: 'Onk Lou',
+          img: 'https://i.scdn.co/image/afb7fb59a35df2e6d8e3e7b7c80ac5fa8b2434a5'
+        }
+      ]
     }
   },
   methods: {
