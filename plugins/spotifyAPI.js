@@ -21,6 +21,9 @@ class SpotifyAPI {
   async getArtistAlbums(authToken, artistId) {
     return this.axios.get(`/artists/${artistId}/albums`, {
       headers: { 'Authorization': 'Bearer ' + authToken },
+      params: {
+        country: 'DE'
+      },
       progress: false
     })
   }

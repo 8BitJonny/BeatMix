@@ -123,7 +123,6 @@ export default {
     },
     createPlaylist: async function () {
       try {
-        this.playlistURL = null;
         let albumPromises = [],
           albums = [],
           tracks = [];
@@ -135,8 +134,18 @@ export default {
         const albumResponses = await Promise.all(albumPromises);
         albumResponses.forEach(albumResponse => albums.push(...albumResponse.data.items));
 
-        let trackResponse = await this.$spotifyApi.getSeveralAlbums(this.cookies['spotify_auth_token'], albums.map(album => album.id).slice(0,20));
-        trackResponse.data.albums.forEach(albums => tracks.push(...albums.tracks.items));
+        let trackPromises = [];
+        while (albums.length > 0) {
+          const end = Math.max(Math.min(albums.length, 20), 0);
+          const albumsToAdd = albums.splice(0, end);
+          trackPromises.push(this.$spotifyApi.getSeveralAlbums(this.cookies['spotify_auth_token'], albumsToAdd.map(album => album.id)));
+        }
+
+        let trackResponses = await Promise.all(trackPromises);
+
+        trackResponses.forEach(trackResponse =>
+          trackResponse.data.albums.forEach(albums => tracks.push(...albums.tracks.items))
+        );
 
         //Filter out the tracks which don't have any of the artists that are in the searchQuery
         tracks = tracks.filter(track =>
@@ -155,13 +164,11 @@ export default {
 
         let newPlaylist = await this.$spotifyApi.createPlaylist(this.cookies['spotify_auth_token'], this.userId, this.value.map(artist => artist.name).join(', '));
 
-        let trackIndex = 0,
-          addTrackPromises = [];
-        while (trackIndex < tracks.length) {
-          const end = Math.max(Math.min(tracks.length - trackIndex, 100), 0);
-          const tracksToAdd = tracks.slice(0, end);
+        let addTrackPromises = [];
+        while (tracks.length > 0) {
+          const end = Math.max(Math.min(tracks.length, 100), 0);
+          const tracksToAdd = tracks.splice(0, end);
           addTrackPromises.push(this.$spotifyApi.addTracksToPlaylist(this.cookies['spotify_auth_token'], newPlaylist.data.id, tracksToAdd.map(track => track.uri)));
-          trackIndex += end;
         }
 
         await Promise.all(addTrackPromises);
