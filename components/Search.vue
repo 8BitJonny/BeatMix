@@ -1,13 +1,6 @@
 <template>
   <div class="flex flex-col">
     <div class="searchContainer">
-      <label
-        for="search"
-        class="label"
-      >
-        Search
-      </label>
-
       <div>
         <multiselect
           id="search"
@@ -19,10 +12,11 @@
           :multiple="true"
           :loading="loading"
           :options="options"
+          :hideSelected="true"
           :closeOnSelect=false
           @select="() => { this.options = []; this.success = null }"
           @search-change="delayedInput"
-          placeholder='Press "/" to focus'
+          placeholder='Select your beloved artists'
         >
           <p slot="noOptions" class="text-sm">No Artists found</p>
         </multiselect>
@@ -208,6 +202,10 @@ export default {
     }
   },
   mounted() {
+    setTimeout(() => {
+      document.querySelector('.searchContainer input').focus();
+    }, 200);
+
     window.addEventListener('keyup', (event) => {
       if (event.key === "/" && !this.$refs.search.isOpen) {
         document.querySelector('.searchContainer input').focus();
@@ -230,7 +228,7 @@ export default {
     @apply text-xl font-semibold mr-2
   }
   .input {
-    width: 400px;
+    width: 500px;
     @apply rounded-md text-black
   }
   .searchResults {

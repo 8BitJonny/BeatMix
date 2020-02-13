@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <nuxt-link to="/">
-      <img src="Spotify.png" class="logo"/>
+      <img src="Logo.svg" class="logo"/>
     </nuxt-link>
     <div class="linkList">
       <nuxt-link to="/">Home</nuxt-link>

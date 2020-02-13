@@ -1,7 +1,7 @@
 {
-  "name": "Spotify-Artist-Mixer",
+  "name": "Fusify",
   "version": "1.0.0",
-  "description": "The Artist Mixer let&#39;s you select a list of your favourite artists from which all tracks are put into one new playlist for you to hear up all day long.",
+  "description": "Fusify - Artist Mixer. Your favourite artists in one playlist within seconds",
   "author": "8BitJonny",
   "private": true,
   "scripts": {

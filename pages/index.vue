@@ -12,9 +12,14 @@
     </notifications>
     <NavBar :userPicture="user.image" />
     <div class="container">
-      <h1 class="title">
-        Spotify Artist Mixer
-      </h1>
+      <div class="mb-12">
+        <h1 class="title">
+          Fusify - Artist Mixer
+        </h1>
+        <p class="subtitle">
+          Your favourite artists in one playlist within seconds.
+        </p>
+      </div>
       <Search
         @click="checkAuth"
         :userId="user.id"
@@ -103,7 +108,10 @@ body {
 .title {
   display: block;
   letter-spacing: 1px;
-  @apply font-semibold text-6xl mb-12
+  @apply font-semibold text-6xl
+}
+.subtitle {
+  @apply text-xl
 }
 
 .vue-notification {
