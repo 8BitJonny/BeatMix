@@ -252,4 +252,25 @@ export default {
     color: #1DB954;
     text-decoration: underline;
   }
+  @media (max-width: 1000px) {
+    .searchResults {
+      width: 636px;
+    }
+  }
+  @media (max-width: 750px) {
+    .searchResults {
+      width: 424px;
+    }
+    .input {
+      width: 300px !important;
+    }
+  }
+  @media (max-width: 500px) {
+    .searchResults {
+      width: 212px;
+    }
+    .input {
+      width: 200px !important;
+    }
+  }
 </style>

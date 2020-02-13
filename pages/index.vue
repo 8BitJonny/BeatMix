@@ -14,7 +14,12 @@
     <div class="container">
       <div class="mb-12">
         <h1 class="title">
-          Fusify - Artist Mixer
+          <span class="desktop">
+            Fusify - Artist Mixer
+          </span>
+          <span class="mobile">
+            Fusify
+          </span>
         </h1>
         <p class="subtitle">
           Your favourite artists in one playlist within seconds.
@@ -92,6 +97,10 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
 
+html, body {
+  width: 100vw;
+}
+
 body {
   background-color: #191414;
   font-family: 'Montserrat', sans-serif;
@@ -127,5 +136,18 @@ body {
 .vue-notification > svg {
   height: 25px;
   margin-right: 10px;
+}
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 400px) {
+  .mobile {
+    display: block;
+  }
+  .desktop {
+    display: none;
+  }
 }
 </style>
