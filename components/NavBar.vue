@@ -61,7 +61,7 @@ export default {
   @apply underline
 }
 .logo {
-  @apply h-12
+  width: 148px;
 }
 .userPicture {
   @apply w-12 h-12 rounded-full
