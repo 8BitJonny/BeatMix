@@ -1,10 +1,37 @@
 <template>
   <div>
+    <notifications width="434px" position="top center" group="error">
+      <template slot="body" slot-scope="props">
+        <ErrorMessage :text="props.item.text" />
+      </template>
+    </notifications>
+    <notifications width="350px" position="top center" group="success">
+      <template slot="body" slot-scope="props">
+        <SuccessMessage />
+      </template>
+    </notifications>
+    <NavBar />
     <nuxt />
   </div>
 </template>
 
+<script>
+  import NavBar from '~/components/NavBar.vue'
+  import ErrorMessage from '~/components/errorNotification.vue'
+  import SuccessMessage from '~/components/successNotification.vue'
+
+  export default {
+    components: {
+      NavBar,
+      ErrorMessage,
+      SuccessMessage
+    }
+  }
+</script>
+
 <style>
+@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+
 html {
   font-family: 'Source Sans Pro', -apple-system, BlinkMacSystemFont, 'Segoe UI',
     Roboto, 'Helvetica Neue', Arial, sans-serif;
@@ -22,6 +49,52 @@ html {
 *:after {
   box-sizing: border-box;
   margin: 0;
+}
+
+html, body {
+  width: 100vw;
+}
+
+body {
+  background-color: #191414;
+  font-family: 'Montserrat', sans-serif;
+  @apply text-white
+}
+
+
+.mobile {
+  display: none;
+}
+
+@media (max-width: 400px) {
+  .mobile {
+    display: block;
+  }
+  .desktop {
+    display: none;
+  }
+}
+
+.container {
+  @apply flex-auto flex flex-col items-center text-center mx-auto my-8
+}
+.content {
+  @apply min-h-screen flex flex-col
+}
+
+.vue-notification {
+  padding: 0.7rem;
+  color: #fff;
+  margin-top: 21px;
+  border-radius: 4px;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+}
+
+.vue-notification > svg {
+  height: 25px;
+  margin-right: 10px;
 }
 
 .button--green {
@@ -51,5 +124,14 @@ html {
 .button--grey:hover {
   color: #fff;
   background-color: #35495e;
+}
+
+.title {
+  display: block;
+  letter-spacing: 1px;
+  @apply font-semibold text-6xl
+}
+.subtitle {
+  @apply text-xl
 }
 </style>

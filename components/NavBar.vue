@@ -6,7 +6,7 @@
     <div class="linkList">
       <nuxt-link to="/">Home</nuxt-link>
       <span v-if="!$store.state.user" @click="login">Login</span>
-      <span>About</span>
+      <nuxt-link to="/about">About</nuxt-link>
       <span v-if="$store.state.user" @click="logout">Logout</span>
       <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer" class="githubLogo">
         <img src="GitHub.png" class="h-10"/>

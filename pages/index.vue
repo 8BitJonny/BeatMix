@@ -1,16 +1,5 @@
 <template>
   <div class="content">
-    <notifications width="434px" position="top center" group="error">
-      <template slot="body" slot-scope="props">
-        <ErrorMessage :text="props.item.text" />
-      </template>
-    </notifications>
-    <notifications width="350px" position="top center" group="success">
-      <template slot="body" slot-scope="props">
-        <SuccessMessage />
-      </template>
-    </notifications>
-    <NavBar />
     <div class="container">
       <div class="mb-12">
         <h1 class="title">
@@ -31,16 +20,10 @@
 
 <script>
 import Search from '~/components/Search.vue'
-import NavBar from '~/components/NavBar.vue'
-import ErrorMessage from '~/components/errorNotification.vue'
-import SuccessMessage from '~/components/successNotification.vue'
 
 export default {
   components: {
-    Search,
-    NavBar,
-    ErrorMessage,
-    SuccessMessage
+    Search
   },
   methods: {
     checkAuth: function() {
@@ -73,60 +56,6 @@ export default {
 }
 </script>
 
-<style>
-@import url('https://fonts.googleapis.com/css?family=Montserrat&display=swap');
+<style scoped>
 
-html, body {
-  width: 100vw;
-}
-
-body {
-  background-color: #191414;
-  font-family: 'Montserrat', sans-serif;
-  @apply text-white
-}
-
-.container {
-  @apply flex-auto flex flex-col items-center text-center mx-auto my-8
-}
-.content {
-  @apply min-h-screen flex flex-col
-}
-
-.title {
-  display: block;
-  letter-spacing: 1px;
-  @apply font-semibold text-6xl
-}
-.subtitle {
-  @apply text-xl
-}
-
-.vue-notification {
-  padding: 0.7rem;
-  color: #fff;
-  margin-top: 21px;
-  border-radius: 4px;
-  font-size: 16px;
-  display: flex;
-  align-items: center;
-}
-
-.vue-notification > svg {
-  height: 25px;
-  margin-right: 10px;
-}
-
-.mobile {
-  display: none;
-}
-
-@media (max-width: 400px) {
-  .mobile {
-    display: block;
-  }
-  .desktop {
-    display: none;
-  }
-}
 </style>
