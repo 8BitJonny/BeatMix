@@ -70,7 +70,7 @@ export default {
           return
         }
 
-        if (this.$store.state.user.id) {
+        if (this.$store.state.user) {
           this.searchArtists.bind(this, event)();
           this.$emit('update', event)
         } else {

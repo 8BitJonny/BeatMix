@@ -11,9 +11,7 @@
           Your favourite artists in one playlist within seconds.
         </p>
       </div>
-      <Search
-        @click="checkAuth"
-      />
+      <Search />
     </div>
   </div>
 </template>
@@ -24,16 +22,6 @@ import Search from '~/components/Search.vue'
 export default {
   components: {
     Search
-  },
-  methods: {
-    checkAuth: function() {
-      if (!this.cookies['spotify_auth_token']) {
-        location.assign(`/login?redirect_uri=${this.getBaseUrl()}/auth/callback`)
-      }
-    },
-    getBaseUrl() {
-      return `${window.location.protocol}//${window.location.host}`
-    }
   },
   computed: {
     cookies: function() {
