@@ -17,9 +17,6 @@
           <span class="desktop">
             Fusify - Artist Mixer
           </span>
-          <span class="mobile">
-            Fusify
-          </span>
         </h1>
         <p class="subtitle">
           Your favourite artists in one playlist within seconds.
@@ -108,7 +105,7 @@ body {
 }
 
 .container {
-  @apply flex-auto flex flex-col items-center text-center mx-auto my-16
+  @apply flex-auto flex flex-col items-center text-center mx-auto my-8
 }
 .content {
   @apply min-h-screen flex flex-col

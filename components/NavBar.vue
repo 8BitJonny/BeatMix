@@ -1,17 +1,17 @@
 <template>
   <div class="navbar">
-    <nuxt-link to="/">
-      <img src="Logo.svg" class="logo"/>
+    <nuxt-link to="/" class="logo">
+      <img src="Logo.svg"/>
     </nuxt-link>
     <div class="linkList">
       <nuxt-link to="/">Home</nuxt-link>
       <span v-if="!userPicture" @click="login">Login</span>
       <span>About</span>
       <span v-if="userPicture" @click="logout">Logout</span>
-      <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer">
+      <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer" class="githubLogo">
         <img src="GitHub.png" class="h-10"/>
       </a>
-      <div v-if="userPicture">
+      <div v-if="userPicture" class="userPicture">
         <img v-if="userPicture !== 'default'" :src="userPicture" class="userPicture" alt="">
         <DefaultUserImage v-else class="userPicture"/>
       </div>
@@ -65,5 +65,23 @@ export default {
 }
 .userPicture {
   @apply w-12 h-12 rounded-full
+}
+@media (max-width: 500px) {
+  .logo {
+    max-width: fit-content;
+    width: 80vw;
+    margin: 0 0 2.5rem 0;
+  }
+  .navbar {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .linkList {
+    width: 80vw;
+  }
+  .githubLogo, .userPicture {
+    display: none;
+    margin: 0;
+  }
 }
 </style>

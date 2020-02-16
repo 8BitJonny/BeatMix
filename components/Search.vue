@@ -28,7 +28,7 @@
         <img v-for="result in value" :src="result.images[0].url" width="180" height="180"/>
       </div>
     </div>
-    <div v-else>
+    <div v-else class="desktop">
       <p class="text-3xl mt-12 -mb-8 ml-4 text-left">Suggestions</p>
       <div class="searchResults">
         <div v-for="suggestion in suggestions">
