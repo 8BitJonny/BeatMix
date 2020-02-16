@@ -28,31 +28,25 @@
         <img v-for="result in value" :src="result.images[0].url" width="180" height="180"/>
       </div>
     </div>
-    <div v-else class="desktop">
-      <p class="text-3xl mt-12 -mb-8 ml-4 text-left">Suggestions</p>
-      <div class="searchResults">
-        <div v-for="suggestion in suggestions">
-          <img :src="suggestion.img" width="180" height="180"/>
-          <p>{{ suggestion.name }}</p>
-        </div>
-      </div>
-    </div>
+    <Suggestions
+      v-else
+      class="desktop"
+    />
     <div v-if="!success && value.length > 0" class="buttonWrapper">
-      <button @click="createPlaylist" class="createButton">Create Playlist</button>
+      <button @click="createMixedArtistPlaylist" class="createButton">Create Playlist</button>
     </div>
   </div>
 </template>
 
 <script>
 import Multiselect from 'vue-multiselect'
+import Suggestions from '~/components/suggestions'
 
 export default {
   name: "Search",
-  props: {
-    userId: String,
-  },
   components: {
-    Multiselect
+    Multiselect,
+    Suggestions
   },
   data: function () {
     return {
@@ -60,22 +54,7 @@ export default {
       value: [],
       options: [],
       loading: false,
-      success: null,
-      suggestions: [
-        {
-          name: 'AViVA',
-          img: 'https://artwork-cdn.7static.com/static/img/sleeveart/00/079/320/0007932086_350.jpg'
-        }, {
-          name: 'Eminem',
-          img: 'https://i.scdn.co/image/56f4762485066b4ef867b96e16775f2b5b4db277'
-        }, {
-          name: 'The Seige',
-          img: 'https://i.scdn.co/image/3e56ba003140ad30e8aa5d35c2db603592d4d690'
-        }, {
-          name: 'Onk Lou',
-          img: 'https://i.scdn.co/image/afb7fb59a35df2e6d8e3e7b7c80ac5fa8b2434a5'
-        }
-      ]
+      success: null
     }
   },
   methods: {
@@ -89,7 +68,7 @@ export default {
           return
         }
 
-        if (this.userId) {
+        if (this.$store.state.user.id) {
           this.searchArtists.bind(this, event)();
           this.$emit('update', event)
         } else {
@@ -105,7 +84,7 @@ export default {
     },
     searchArtists: function(artistName) {
       this.loading = true;
-      this.$spotifyApi.search(this.cookies['spotify_auth_token'], artistName)
+      this.$spotifyApi.search(this.$store.state.token, artistName)
         .then(result => {
           this.loading = false;
           this.options = result.data.artists.items
@@ -115,40 +94,13 @@ export default {
           console.error(err)
         })
     },
-    createPlaylist: async function () {
+    createMixedArtistPlaylist: async function () {
       try {
-        let albumPromises = [],
-          albums = [],
-          tracks = [];
-        this.value.forEach(artist => {
-          albumPromises.push(
-            this.$spotifyApi.getArtistAlbums(this.cookies['spotify_auth_token'], artist.id)
-          )
-        });
-        const albumResponses = await Promise.all(albumPromises);
-        albumResponses.forEach(albumResponse => albums.push(...albumResponse.data.items));
+        let albums = await this.getAllAlbums(this.value);
 
-        let trackPromises = [];
-        while (albums.length > 0) {
-          const end = Math.max(Math.min(albums.length, 20), 0);
-          const albumsToAdd = albums.splice(0, end);
-          trackPromises.push(this.$spotifyApi.getSeveralAlbums(this.cookies['spotify_auth_token'], albumsToAdd.map(album => album.id)));
-        }
+        let tracks = await this.getAllTracks(albums);
 
-        let trackResponses = await Promise.all(trackPromises);
-
-        trackResponses.forEach(trackResponse =>
-          trackResponse.data.albums.forEach(albums => tracks.push(...albums.tracks.items))
-        );
-
-        //Filter out the tracks which don't have any of the artists that are in the searchQuery
-        tracks = tracks.filter(track =>
-          track.artists.some(artist =>
-            this.value.some(v =>
-              v.id === artist.id
-            )
-          )
-        );
+        tracks = this.filterOutTracksFromNotWantedArtists(tracks);
 
         tracks = tracks.map(el => {
           el.duration_ms = Math.floor(el.duration_ms / 1000);
@@ -156,16 +108,9 @@ export default {
         });
         tracks = this.filterDuplicates(tracks, ['name', 'duration_ms']);
 
-        let newPlaylist = await this.$spotifyApi.createPlaylist(this.cookies['spotify_auth_token'], this.userId, this.value.map(artist => artist.name).join(', '));
+        let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
 
-        let addTrackPromises = [];
-        while (tracks.length > 0) {
-          const end = Math.max(Math.min(tracks.length, 100), 0);
-          const tracksToAdd = tracks.splice(0, end);
-          addTrackPromises.push(this.$spotifyApi.addTracksToPlaylist(this.cookies['spotify_auth_token'], newPlaylist.data.id, tracksToAdd.map(track => track.uri)));
-        }
-
-        await Promise.all(addTrackPromises);
+        await this.addTracksToPlaylist(newPlaylist.data.id, tracks);
 
         this.success = true;
         this.$notify({
@@ -188,18 +133,64 @@ export default {
         ))
       )
     },
-    allEqual: (arr, matcher) => arr.every( v => v === matcher )
-  },
-  computed: {
-    cookies: function() {
-      const pairs = document.cookie.split(";");
-      let cookies = {};
-      for (let i=0; i<pairs.length; i++){
-        let pair = pairs[i].split("=");
-        cookies[(pair[0]+'').trim()] = unescape(pair.slice(1).join('='));
+    async getAllAlbums(artists) {
+      let albumPromises = [],
+        albumResponses,
+        albums = [],
+        offset = 0;
+
+      do {
+        artists.forEach(artist => {
+          albumPromises.push(
+            this.$spotifyApi.getArtistAlbums(this.$store.state.token, artist.id, this.$store.state.user.country, offset)
+          )
+        });
+        albumResponses = await Promise.all(albumPromises);
+        albumResponses.forEach(albumResponse => albums.push(...albumResponse.data.items));
+        offset += 20;
+      } while (albumResponses[albumResponses.length - 1].data.next !== null);
+
+      return albums
+    },
+    async getAllTracks(albums) {
+      let trackPromises = [],
+        tracks = [];
+      while (albums.length > 0) {
+        const end = Math.max(Math.min(albums.length, 20), 0);
+        const albumsToAdd = albums.splice(0, end);
+        trackPromises.push(this.$spotifyApi.getSeveralAlbums(this.$store.state.token, albumsToAdd.map(album => album.id)));
       }
-      return cookies;
-    }
+
+      let trackResponses = await Promise.all(trackPromises);
+
+      trackResponses.forEach(trackResponse =>
+        trackResponse.data.albums.forEach(albums => tracks.push(...albums.tracks.items))
+      );
+      return tracks;
+    },
+    filterOutTracksFromNotWantedArtists(tracks) {
+      return tracks.filter(track =>
+        track.artists.some(artist =>
+          this.value.some(v =>
+            v.id === artist.id
+          )
+        )
+      );
+    },
+    async createPlaylist(name) {
+      return await this.$spotifyApi.createPlaylist(this.$store.state.token, this.$store.state.user.id, name);
+    },
+    async addTracksToPlaylist(playlistID, tracks) {
+      let addTrackPromises = [];
+      while (tracks.length > 0) {
+        const end = Math.max(Math.min(tracks.length, 100), 0);
+        const tracksToAdd = tracks.splice(0, end);
+        addTrackPromises.push(this.$spotifyApi.addTracksToPlaylist(this.$store.state.token, playlistID, tracksToAdd.map(track => track.uri)));
+      }
+
+      return await Promise.all(addTrackPromises);
+    },
+    allEqual: (arr, matcher) => arr.every( v => v === matcher )
   },
   mounted() {
     setTimeout(() => {
@@ -219,18 +210,6 @@ export default {
   .multiselect__tag {
     background-color: #1DB954;
   }
-</style>
-<style scoped>
-  .searchContainer {
-    @apply flex justify-center items-center
-  }
-  .label {
-    @apply text-xl font-semibold mr-2
-  }
-  .input {
-    width: 500px;
-    @apply rounded-md text-black
-  }
   .searchResults {
     width: 848px;
     @apply flex flex-wrap justify-start mt-8
@@ -240,17 +219,6 @@ export default {
     height: 180px;
     box-shadow: 0 4px 4px #000000;
     @apply m-4
-  }
-  .createButton {
-    background-color: #1DB954;
-    @apply px-4 py-2 rounded-md
-  }
-  .buttonWrapper {
-    @apply mt-8
-  }
-  a {
-    color: #1DB954;
-    text-decoration: underline;
   }
   @media (max-width: 1000px) {
     .searchResults {
@@ -272,5 +240,25 @@ export default {
     .input {
       width: 200px !important;
     }
+  }
+</style>
+<style scoped>
+  .searchContainer {
+    @apply flex justify-center items-center
+  }
+  .input {
+    width: 500px;
+    @apply rounded-md text-black
+  }
+  .createButton {
+    background-color: #1DB954;
+    @apply px-4 py-2 rounded-md
+  }
+  .buttonWrapper {
+    @apply mt-8
+  }
+  a {
+    color: #1DB954;
+    text-decoration: underline;
   }
 </style>

@@ -10,7 +10,7 @@
         <SuccessMessage />
       </template>
     </notifications>
-    <NavBar :userPicture="user.image" />
+    <NavBar />
     <div class="container">
       <div class="mb-12">
         <h1 class="title">
@@ -24,7 +24,6 @@
       </div>
       <Search
         @click="checkAuth"
-        :userId="user.id"
       />
     </div>
   </div>
@@ -37,14 +36,6 @@ import ErrorMessage from '~/components/errorNotification.vue'
 import SuccessMessage from '~/components/successNotification.vue'
 
 export default {
-  data: () => {
-    return {
-      user: {
-        image: null,
-        id: null
-      }
-    }
-  },
   components: {
     Search,
     NavBar,
@@ -74,18 +65,9 @@ export default {
   },
   mounted: function() {
     if (this.cookies['spotify_auth_token']) {
-      this.$axios.$get('https://api.spotify.com/v1/me',
-        { headers: {
-          'Authorization': 'Bearer ' + this.cookies['spotify_auth_token']
-        }}
-      ).then(result => {
-        this.user.image = result.images.length > 0 ? result.images[0].url : 'default';
-        this.user.id = result.id;
-      }).catch(err => {
-        if (err.response.data.error.message === 'The access token expired') {
-          location.assign("/refreshToken")
-        }
-      })
+      console.log(this);
+      this.$store.commit('SET_TOKEN', this.cookies['spotify_auth_token']);
+      this.$store.dispatch('FETCH_USER')
     }
   }
 }

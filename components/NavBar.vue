@@ -5,14 +5,14 @@
     </nuxt-link>
     <div class="linkList">
       <nuxt-link to="/">Home</nuxt-link>
-      <span v-if="!userPicture" @click="login">Login</span>
+      <span v-if="!$store.state.user" @click="login">Login</span>
       <span>About</span>
-      <span v-if="userPicture" @click="logout">Logout</span>
+      <span v-if="$store.state.user" @click="logout">Logout</span>
       <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer" class="githubLogo">
         <img src="GitHub.png" class="h-10"/>
       </a>
-      <div v-if="userPicture" class="userPicture">
-        <img v-if="userPicture !== 'default'" :src="userPicture" class="userPicture" alt="">
+      <div v-if="$store.state.user" class="userPicture">
+        <img v-if="$store.state.user.image !== 'default'" :src="$store.state.user.image" class="userPicture" alt="">
         <DefaultUserImage v-else class="userPicture"/>
       </div>
     </div>
@@ -24,9 +24,6 @@ import DefaultUserImage from "~/components/defaultUserImage";
 
 export default {
   name: "NavBar",
-  props: {
-    userPicture: String,
-  },
   components: {
     DefaultUserImage
   },
