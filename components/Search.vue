@@ -119,6 +119,12 @@ export default {
           text: newPlaylist.data.external_urls.spotify
         });
       } catch(err) {
+        this.$notify({
+          duration: 7000,
+          type: 'error',
+          group: 'error',
+          text: 'Ups, some network issue occurred. The playlist may be incomplete or not present at all. Try again and if the issue keeps happening contact timon.christiansen@code.berlin'
+        });
         console.log("Error: ", err);
         this.loading = false;
       }
