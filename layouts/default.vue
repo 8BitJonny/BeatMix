@@ -79,7 +79,7 @@ body {
   @apply flex-auto flex flex-col items-center text-center mx-auto my-8
 }
 .content {
-  @apply min-h-screen flex flex-col
+  @apply flex flex-col
 }
 
 .vue-notification {
