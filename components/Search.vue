@@ -33,7 +33,7 @@
     />
     <div v-if="!success && value.length > 0" class="buttonWrapper">
       <button @click="createMixedArtistPlaylist" class="createButton ld-ext-left" :class="{ running: loading }">
-        Create Playlist
+        {{ loading ? 'Creating' : 'Create Playlist' }}
         <div class="ld ld-ring ld-spin"></div>
       </button>
     </div>
