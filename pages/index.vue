@@ -48,7 +48,6 @@ export default {
   },
   mounted: function() {
     if (this.cookies['spotify_auth_token']) {
-      console.log(this);
       this.$store.commit('SET_TOKEN', this.cookies['spotify_auth_token']);
       this.$store.dispatch('FETCH_USER')
     }

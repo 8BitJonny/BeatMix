@@ -10,7 +10,6 @@
           track-by="id"
           v-model="value"
           :multiple="true"
-          :loading="loading"
           :options="options"
           :hideSelected="true"
           :closeOnSelect=false
@@ -33,7 +32,10 @@
       class="desktop"
     />
     <div v-if="!success && value.length > 0" class="buttonWrapper">
-      <button @click="createMixedArtistPlaylist" class="createButton">Create Playlist</button>
+      <button @click="createMixedArtistPlaylist" class="createButton ld-ext-left" :class="{ running: loading }">
+        Create Playlist
+        <div class="ld ld-ring ld-spin"></div>
+      </button>
     </div>
   </div>
 </template>
@@ -83,19 +85,15 @@ export default {
       }, 250)
     },
     searchArtists: function(artistName) {
-      this.loading = true;
       this.$spotifyApi.search(this.$store.state.token, artistName)
         .then(result => {
-          this.loading = false;
           this.options = result.data.artists.items
         })
-        .catch(err => {
-          this.loading = true;
-          console.error(err)
-        })
+        .catch(console.error)
     },
     createMixedArtistPlaylist: async function () {
       try {
+        this.loading = true;
         let albums = await this.getAllAlbums(this.value);
 
         let tracks = await this.getAllTracks(albums);
@@ -112,6 +110,7 @@ export default {
 
         await this.addTracksToPlaylist(newPlaylist.data.id, tracks);
 
+        this.loading = false;
         this.success = true;
         this.$notify({
           duration: 3000,
@@ -120,7 +119,8 @@ export default {
           text: newPlaylist.data.external_urls.spotify
         });
       } catch(err) {
-        console.log("Error: ", err)
+        console.log("Error: ", err);
+        this.loading = false;
       }
     },
     filterDuplicates: function(array, matchProperties) {

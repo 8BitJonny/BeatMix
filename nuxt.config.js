@@ -26,7 +26,9 @@ module.exports = {
   ** Global CSS
   */
   css: [
-    'vue-multiselect/dist/vue-multiselect.min.css'
+    'vue-multiselect/dist/vue-multiselect.min.css',
+    '@/assets/css/ldbtn.min.css',
+    '@/assets/css/loading.min.css'
   ],
   purgeCSS: {
     whitelistPatterns: [
