@@ -3,7 +3,7 @@
     <p class="text-3xl mt-12 -mb-8 ml-4 text-left">Suggestions</p>
     <div class="searchResults">
       <div v-for="suggestion in suggestions">
-        <img :src="suggestion.img" width="180" height="180"/>
+        <img :src="suggestion.img" width="180" height="180" class="mb-1"/>
         <p>{{ suggestion.name }}</p>
       </div>
     </div>

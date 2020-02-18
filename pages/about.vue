@@ -4,14 +4,14 @@
       <div class="mb-12">
         <h1 class="title">
           <span class="desktop">
-            Fusify - About
+            BeatMix - About
           </span>
         </h1>
         <p class="subtitle">
           Your favourite artists in one playlist within seconds.
         </p><br><br>
         <p class="text-left">
-          I spent a lot of time on Spotify. This year even more than ever and that's when I got the idea for Fusify.
+          I spend a lot of time on Spotify. This year even more than ever and that's when I got the idea for BeatMix.
           <br><br>
 
           Did you ever had the luck of discovering an artist which you can listen to all day long because they don't really have
@@ -20,7 +20,7 @@
           <br><br>
 
           The only thing better than this is to be able to shuffle between multiple of your favourite artists and all their songs.
-          And this is exactly what Fusify enables you to do. Connect with your Spotify account, search for your beloved artists and
+          And this is exactly what BeatMix enables you to do. Connect with your Spotify account, search for your beloved artists and
           create a playlist with all their songs within seconds.
           <br><br>
 
