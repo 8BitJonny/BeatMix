@@ -15,6 +15,5 @@ The only thing better than this is to be able to shuffle between multiple of you
 And this is exactly what BeatMix enables you to do. Connect with your Spotify account, search for your beloved artists and
 create a playlist with all their songs within seconds.
 
-## :computer: Contribution
+## :computer: Contribute
 Welcome to improve this little project of mine with any issue, pull request or code review!
-
