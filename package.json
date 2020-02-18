@@ -1,7 +1,7 @@
 {
-  "name": "Fusify",
+  "name": "beatmix",
   "version": "1.0.0",
-  "description": "Fusify - Artist Mixer. Your favourite artists in one playlist within seconds",
+  "description": "BeatMix - Artist Mixer. Your favourite artists in one playlist within seconds",
   "author": "8BitJonny",
   "private": true,
   "scripts": {

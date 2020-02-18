@@ -4,7 +4,7 @@
       <div class="mb-12">
         <h1 class="title">
           <span class="desktop">
-            Fusify - Artist Mixer
+            BeatMix - Artist Mixer
           </span>
         </h1>
         <p class="subtitle">
