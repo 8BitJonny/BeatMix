@@ -28,11 +28,32 @@ export default {
     DefaultUserImage
   },
   methods: {
+    generateRandomString(length) {
+      let text = '';
+      const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+
+      for (let i = 0; i < length; i++) {
+        text += possible.charAt(Math.floor(Math.random() * possible.length));
+      }
+      return text
+    },
     login: function() {
-      location.assign(`/login?redirect_uri=${this.getBaseUrl()}/auth/callback`)
+      const state = this.generateRandomString(16);
+      localStorage.setItem('state', state);
+
+      let url = 'https://accounts.spotify.com/authorize';
+      url += '?response_type=token';
+      url += '&client_id=' + encodeURIComponent('9af8e00f395c488b9e39f573e06c22ae');
+      url += '&redirect_uri=' + encodeURIComponent(this.getBaseUrl());
+      url += '&scope=' + encodeURIComponent('user-read-private user-read-email playlist-modify-public');
+      url += '&state=' + encodeURIComponent(state);
+      window.location = url;
+
+      //location.assign(`/login?redirect_uri=${this.getBaseUrl()}/auth/callback`)
     },
     logout: function() {
-      location.assign("/logout")
+      this.$store.dispatch('LOGOUT');
+      //location.assign("/logout")
     },
     getBaseUrl() {
       return `${window.location.protocol}//${window.location.host}`

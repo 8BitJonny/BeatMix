@@ -27,8 +27,13 @@ export const actions = {
       commit('SET_USER', user);
     }).catch(err => {
       if (err.response.data.error.message === 'The access token expired') {
-        location.assign("/refreshToken")
+        commit('SET_USER', null);
+        commit('SET_TOKEN', null);
       }
     });
+  },
+  LOGOUT({ commit }) {
+    commit('SET_USER', null);
+    commit('SET_TOKEN', null);
   }
 };

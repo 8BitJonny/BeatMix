@@ -34,7 +34,37 @@ export default {
       return cookies;
     }
   },
+  methods: {
+    getHashParams() {
+      let hashParams = {};
+      let e, r = /([^&;=]+)=?([^&;]*)/g,
+        q = window.location.hash.substring(1);
+      while ( e = r.exec(q) ) {
+        hashParams[e[1]] = decodeURIComponent(e[2])
+      }
+      return hashParams;
+    }
+  },
   mounted: function() {
+    const storedState = localStorage.getItem('state');
+
+    if (storedState) {
+      const { access_token, state } = this.getHashParams();
+
+      if (access_token && (state == null || state !== storedState)) {
+        console.log('Error during Authentication');
+        return;
+      }
+
+      this.$store.commit('SET_TOKEN', access_token);
+      this.$store.dispatch('FETCH_USER');
+
+      localStorage.removeItem('state');
+      this.$router.push({
+        path: '/'
+      })
+    }
+
     if (this.cookies['spotify_auth_token']) {
       this.$store.commit('SET_TOKEN', this.cookies['spotify_auth_token']);
       this.$store.dispatch('FETCH_USER')
