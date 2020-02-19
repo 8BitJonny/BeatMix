@@ -46,6 +46,11 @@ export default {
     }
   },
   mounted: function() {
+    // Temporary: Redirect to new domain
+    if (window.location.hostname.includes('herokuapp')) {
+      window.location = 'https://beatmix.app'
+    }
+
     const storedState = localStorage.getItem('state');
 
     if (storedState) {
