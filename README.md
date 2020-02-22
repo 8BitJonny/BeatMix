@@ -19,7 +19,7 @@ create a playlist with all their songs within seconds.
 
 ## :oncoming_automobile: RoadMap
 
-- [ ] provide option to filter out Intstrumental and Live versions of Songs
+- [ ] provide option to filter out Intstrumental, Commenatary and Live versions of Songs
 
 ### Still in ideation
 - [ ] see global recently created playlists as inspiration
