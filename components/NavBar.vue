@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
     <nuxt-link to="/" class="logo">
-      <img src="Logo.svg"/>
+      <img src="~/assets/img/Logo.svg"/>
     </nuxt-link>
     <div class="linkList">
       <nuxt-link to="/">Home</nuxt-link>
@@ -9,7 +9,7 @@
       <nuxt-link to="/about">About</nuxt-link>
       <span v-if="$store.state.user" @click="logout">Logout</span>
       <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer" class="githubLogo">
-        <img src="GitHub.png" class="h-10"/>
+        <img src="~/assets/img/GitHub.png" class="h-10"/>
       </a>
       <div v-if="$store.state.user" class="userPicture">
         <img v-if="$store.state.user.image !== 'default'" :src="$store.state.user.image" class="userPicture" alt="">

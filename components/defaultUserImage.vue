@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img src="user-silhouette.svg" class="userPicture" alt="">
+    <img src="~/assets/img/user-silhouette.svg" class="userPicture" alt="">
   </div>
 </template>
 
