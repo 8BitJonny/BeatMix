@@ -9,9 +9,9 @@ module.exports = {
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: 'Create a playlist with all Spotify tracks from your favorite artists within seconds.' },
+      { hid: 'description', name: 'description', content: 'Create Spotify playlists with all the tracks from your favorite artists within seconds.' },
       { property: 'og:title', content: 'BeatMix - Spotify Artist Mixer' },
-      { property: 'og:description', content: 'Create a playlist with all Spotify tracks from your favorite artists within seconds.' },
+      { property: 'og:description', content: 'Create Spotify playlists with all the tracks from your favorite artists within seconds.' },
       { property: 'og:site_name', content: 'BeatMix' },
       { property: 'og:image', content: 'https://beatmix.app/beatmix-og-img.png' }
     ],
