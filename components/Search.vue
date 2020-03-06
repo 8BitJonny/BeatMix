@@ -108,6 +108,9 @@ export default {
 
         let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
 
+        const blacklist = new RegExp(/((?:[\(-][\w ]*)Commentary|Commentary(?:\:))|((?:[\(-][\w /]*)Instrumental)|((?:[\(-][\w /]*)Live)/)
+        tracks = tracks.filter(track => !blacklist.test(track.name))
+
         await this.addTracksToPlaylist(newPlaylist.data.id, tracks);
 
         this.loading = false;
