@@ -4,7 +4,7 @@
     <div class="searchResults">
       <div v-for="suggestion in suggestions">
         <img :src="suggestion.img" width="180" height="180" class="mb-1"/>
-        <p>{{ suggestion.name }}</p>
+        <p class="sub">{{ suggestion.name }}</p>
       </div>
     </div>
   </div>
@@ -36,5 +36,7 @@
 </script>
 
 <style scoped>
-
+.sub {
+  @apply mt-2
+}
 </style>

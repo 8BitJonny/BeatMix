@@ -1,6 +1,7 @@
 export const state = () => ({
   user: null,
-  token: null
+  token: null,
+  filters: ['commentary', 'instrumental', 'live']
 });
 
 export const mutations = {
@@ -9,6 +10,9 @@ export const mutations = {
   },
   SET_TOKEN(state, token) {
     state.token = token
+  },
+  SET_FILTER(state, filters) {
+    state.filters = filters
   }
 };
 

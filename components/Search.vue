@@ -31,11 +31,23 @@
       v-else
       class="desktop"
     />
-    <div v-if="!success && value.length > 0" class="buttonWrapper">
-      <button @click="createMixedArtistPlaylist" class="createButton ld-ext-left" :class="{ running: loading }">
-        {{ loading ? 'Creating' : 'Create Playlist' }}
-        <div class="ld ld-ring ld-spin"></div>
-      </button>
+    <div v-if="!success && value.length > 0 || true" class="buttonWrapper">
+      <div class="createButton relative">
+        <button @click="createMixedArtistPlaylist" class="ld-ext-left" :class="{ running: loading }">
+          {{ loading ? 'Creating' : 'Create Playlist' }}
+          <div class="ld ld-ring ld-spin"></div>
+        </button>
+        <button @click="settingsOpen = !settingsOpen">
+          <img
+            src="~/assets/img/gear.svg"
+            height="18px"
+            width="18px"
+          >
+        </button>
+        <settings
+          v-if="settingsOpen"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -43,12 +55,14 @@
 <script>
 import Multiselect from 'vue-multiselect'
 import Suggestions from '~/components/suggestions'
+import Settings from '~/components/settings'
 
 export default {
   name: "Search",
   components: {
     Multiselect,
-    Suggestions
+    Suggestions,
+    Settings
   },
   data: function () {
     return {
@@ -56,7 +70,8 @@ export default {
       value: [],
       options: [],
       loading: false,
-      success: null
+      success: null,
+      settingsOpen: false
     }
   },
   methods: {
@@ -108,25 +123,24 @@ export default {
 
         let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
 
-        const blacklist = new RegExp(/((?:[\(-][\w ]*)Commentary|Commentary(?:\:))|((?:[\(-][\w /]*)Instrumental)|((?:[\(-][\w /]*)Live)/)
-        tracks = tracks.filter(track => !blacklist.test(track.name))
+        tracks = this.removeBlacklistedTrackTypes(tracks)
 
         await this.addTracksToPlaylist(newPlaylist.data.id, tracks);
 
         this.loading = false;
         this.success = true;
         this.$notify({
-          duration: 3000,
+          duration: 5000,
           type: 'success',
           group: 'success',
           text: newPlaylist.data.external_urls.spotify
         });
       } catch(err) {
         this.$notify({
-          duration: 7000,
+          duration: 9000,
           type: 'error',
           group: 'error',
-          text: 'Ups, some network issue occurred. The playlist may be incomplete or not present at all. Try again and if the issue keeps happening contact timon.christiansen@code.berlin'
+          text: 'Ups, some network issue occurred. Most of the time the playlist just misses a few tracks but sometimes it failed completely. Try again or contact timon.christiansen@code.berlin'
         });
         console.log("Error: ", err);
         this.loading = false;
@@ -188,6 +202,25 @@ export default {
     },
     async createPlaylist(name) {
       return await this.$spotifyApi.createPlaylist(this.$store.state.token, this.$store.state.user.id, name);
+    },
+    removeBlacklistedTrackTypes(tracks) {
+      const regex = this.$store.state.filters
+        .map(filter => {
+          switch (filter) {
+            case 'live':
+              return '((?:[\\(-][\\w /]*)Live)';
+            case 'instrumental':
+              return '((?:[\\(-][\\w /]*)Instrumental)';
+            case 'commentary':
+              return '((?:[\\(-][\\w ]*)Commentary|Commentary(?:\\:))'
+          }
+        })
+        .join('|');
+
+      if (regex === '') return tracks;
+
+      const blacklist = new RegExp(regex,'i');
+      return tracks.filter(track => !blacklist.test(track.name))
     },
     async addTracksToPlaylist(playlistID, tracks) {
       let addTrackPromises = [];
@@ -261,7 +294,14 @@ export default {
   }
   .createButton {
     background-color: #1DB954;
-    @apply px-4 py-2 rounded-md
+    @apply rounded-md inline-flex select-none
+  }
+  .createButton > button:nth-child(1) {
+    border-right: 2px solid #191414;
+    @apply px-4 py-2 select-none outline-none
+  }
+  .createButton > button:nth-child(2) {
+    @apply px-3 py-1 select-none outline-none
   }
   .buttonWrapper {
     @apply mt-8
