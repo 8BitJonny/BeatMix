@@ -4,13 +4,11 @@
       <img src="~/assets/img/Logo.svg"/>
     </nuxt-link>
     <div class="linkList">
-      <nuxt-link to="/">Home</nuxt-link>
       <span v-if="!$store.state.user" @click="login">Login</span>
       <nuxt-link to="/about">About</nuxt-link>
       <span v-if="$store.state.user" @click="logout">Logout</span>
-      <a href="https://github.com/8BitJonny/Spotify-Artist-Mixer" class="githubLogo">
-        <img src="~/assets/img/GitHub.png" class="h-10"/>
-      </a>
+      <nuxt-link to="/imprint">Imprint</nuxt-link>
+      <nuxt-link to="/privacy">Privacy</nuxt-link>
       <div v-if="$store.state.user" class="userPicture">
         <img v-if="$store.state.user.image !== 'default'" :src="$store.state.user.image" class="userPicture" alt="">
         <DefaultUserImage v-else class="userPicture"/>
@@ -23,7 +21,7 @@
 import DefaultUserImage from "~/components/defaultUserImage";
 
 export default {
-  name: "NavBar",
+  name: "TheNavBar",
   components: {
     DefaultUserImage
   },

@@ -31,7 +31,7 @@
       v-else
       class="desktop"
     />
-    <div v-if="!success && value.length > 0 || true" class="buttonWrapper">
+    <div v-if="!success && value.length > 0" class="buttonWrapper">
       <div class="createButton relative">
         <button @click="createMixedArtistPlaylist" class="ld-ext-left" :class="{ running: loading }">
           {{ loading ? 'Creating' : 'Create Playlist' }}

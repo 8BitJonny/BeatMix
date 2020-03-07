@@ -10,23 +10,26 @@
         <SuccessMessage />
       </template>
     </notifications>
-    <NavBar />
+    <TheNavBar />
     <nuxt />
+    <TheFooter />
   </div>
 </template>
 
 <script>
-  import NavBar from '~/components/NavBar.vue'
-  import ErrorMessage from '~/components/errorNotification.vue'
-  import SuccessMessage from '~/components/successNotification.vue'
+import TheNavBar from '~/components/TheNavBar.vue'
+import TheFooter from '~/components/TheFooter'
+import ErrorMessage from '~/components/errorNotification.vue'
+import SuccessMessage from '~/components/successNotification.vue'
 
-  export default {
-    components: {
-      NavBar,
-      ErrorMessage,
-      SuccessMessage
-    }
+export default {
+  components: {
+    TheNavBar,
+    TheFooter,
+    ErrorMessage,
+    SuccessMessage
   }
+}
 </script>
 
 <style>
@@ -53,6 +56,7 @@ html {
 
 html, body {
   width: 100vw;
+  overflow-x: hidden;
 }
 
 body {
