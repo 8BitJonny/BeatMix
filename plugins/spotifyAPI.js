@@ -23,7 +23,8 @@ class SpotifyAPI {
       headers: { 'Authorization': 'Bearer ' + authToken },
       params: {
         country,
-        offset
+        offset,
+        limit: 50
       },
       progress: false
     })

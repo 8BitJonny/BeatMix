@@ -157,21 +157,19 @@ export default {
       )
     },
     async getAllAlbums(artists) {
-      let albumPromises = [],
-        albumResponses,
-        albums = [],
-        offset = 0;
+      const albums = [];
 
-      do {
-        artists.forEach(artist => {
-          albumPromises.push(
-            this.$spotifyApi.getArtistAlbums(this.$store.state.token, artist.id, this.$store.state.user.country, offset)
-          )
-        });
-        albumResponses = await Promise.all(albumPromises);
-        albumResponses.forEach(albumResponse => albums.push(...albumResponse.data.items));
-        offset += 20;
-      } while (albumResponses[albumResponses.length - 1].data.next !== null);
+      for (let index=0; index < artists.length; index++) {
+        const artist = artists[index];
+        let albumResponse;
+        let offset = 0;
+        do {
+          albumResponse = await this.$spotifyApi.getArtistAlbums(this.$store.state.token, artist.id, this.$store.state.user.country, offset);
+          albums.push(...albumResponse.data.items);
+          offset += 50;
+        } while (albumResponse.data.next !== null);
+        offset = 0
+      }
 
       return albums
     },
