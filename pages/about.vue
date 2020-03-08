@@ -8,22 +8,34 @@
           </span>
         </h1>
         <p class="subtitle">
-          Your favourite artists in one playlist within seconds.
+          Enables Shuffle and Radio for multiple artists in Spotify
         </p><br><br>
         <p class="text-left">
-          I spend a lot of time on Spotify. This year even more than ever and that's when I got the idea for BeatMix.
+          A few weeks ago I noticed that Spotify is still lacking some important
+          features that have been long requested by the community:
+          - being able to shuffle multiple artists
+          - being able to play the radio of multiple artists
           <br><br>
 
-          Did you ever had the luck of discovering an artist which you can listen to all day long because they don't really have
-          any song that you don't like? This amazing feeling when you can just open Spotify, get on the artists profile and click shuffle
-          without having to worry if you like the songs that come up.
+          BeatMix is here to finally solve these problems! 🕺🏻 💃🏻
           <br><br>
-
-          The only thing better than this is to be able to shuffle between multiple of your favourite artists and all their songs.
-          And this is exactly what BeatMix enables you to do. Connect with your Spotify account, search for your beloved artists and
-          create a playlist with all their songs within seconds.
+          The Web App allows you to enter up to 8 artists and it will fetch
+          all the tracks from all the artists, filter them and put them into a new playlist
+          for you to enjoy all day long. And everything just takes a few seconds after
+          which you can switch back to Spotify where your new playlist is already awaiting you.
           <br><br>
-
+          Why filtered?
+          By default live versions, commentary versions and instrumental versions
+          are ignored because they are special versions of tracks that are already
+          added to the playlist. But you are welcome to toggle each of those individually if,
+          for example, you are a big fan of the live versions like me.
+          <br><br>
+          And when you are done hearing the playlist up and down,
+          try out the Spotify radio function of the playlist. This radio is now fully
+          trimmed to give you the best track suggestions based on the artists you entered.
+          So, I hope you enjoy my little side project and that it helps you create
+          lots of awesome Spotify playlist! 🎧🕺🏻
+          <br><br>
           Have fun, <br>
           Timon
 

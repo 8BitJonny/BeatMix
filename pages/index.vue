@@ -4,11 +4,11 @@
       <div class="mb-12">
         <h1 class="title">
           <span class="desktop">
-            BeatMix - Artist Mixer
+            BeatMix for Spotify
           </span>
         </h1>
         <p class="subtitle">
-          Your favourite artists in one playlist within seconds.
+          Select your favorite artists and enjoy your new playlist with all of their tracks.
         </p>
       </div>
       <Search />
