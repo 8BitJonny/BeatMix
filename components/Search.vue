@@ -3,6 +3,7 @@
     <div class="searchContainer">
       <div>
         <multiselect
+          :max="8"
           id="search"
           ref="search"
           label="name"
@@ -140,7 +141,7 @@ export default {
           duration: 9000,
           type: 'error',
           group: 'error',
-          text: 'Ups, some network issue occurred. Most of the time the playlist just misses a few tracks but sometimes it failed completely. Try again or contact timon.christiansen@code.berlin'
+          text: 'Ups, some network issue occurred. Try again and if it keeps happening contact timon.christiansen@code.berlin'
         });
         console.log("Error: ", err);
         this.loading = false;
