@@ -54,14 +54,14 @@ export default {
     const storedState = localStorage.getItem('state');
 
     if (storedState) {
-      const { access_token, state } = this.getHashParams();
+      const { access_token, state, expires_in } = this.getHashParams();
 
       if (access_token && (state == null || state !== storedState)) {
         console.log('Error during Authentication');
         return;
       }
 
-      this.$store.commit('SET_TOKEN', access_token);
+      this.$store.dispatch('SET_TOKEN', { access_token, expires_in });
       this.$store.dispatch('FETCH_USER');
 
       localStorage.removeItem('state');

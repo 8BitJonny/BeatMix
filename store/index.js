@@ -1,7 +1,8 @@
 export const state = () => ({
   user: null,
   token: null,
-  filters: ['commentary', 'instrumental', 'live']
+  filters: ['commentary', 'instrumental', 'live'],
+  timeout: null
 });
 
 export const mutations = {
@@ -13,6 +14,9 @@ export const mutations = {
   },
   SET_FILTER(state, filters) {
     state.filters = filters
+  },
+  SET_TIMEOUT(state, timeout) {
+    state.timeout = timeout
   }
 };
 
@@ -36,8 +40,22 @@ export const actions = {
       }
     });
   },
-  LOGOUT({ commit }) {
+  LOGOUT({ commit, dispatch }) {
     commit('SET_USER', null);
     commit('SET_TOKEN', null);
+    dispatch('SET_TIMEOUT', null)
+  },
+  SET_TOKEN({ commit, state, dispatch }, { access_token, expires_in }) {
+    commit('SET_TOKEN', access_token);
+    const timeout = setTimeout(() => {
+      dispatch('LOGOUT')
+    }, expires_in * 1000);
+    dispatch('SET_TIMEOUT', timeout)
+  },
+  SET_TIMEOUT({ commit, state }, timeout) {
+    const oldTimout = state.timeout;
+    if (oldTimout !== null) clearTimeout(oldTimout);
+
+    commit('SET_TIMEOUT', timeout)
   }
 };
