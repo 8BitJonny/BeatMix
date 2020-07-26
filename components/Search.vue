@@ -25,7 +25,23 @@
     <div v-if="value.length > 0">
       <p class="text-3xl mt-12 -mb-8 ml-4 text-left">Your selected Artists</p>
       <div class="searchResults">
-        <img v-for="result in value" :src="result.images[0].url" width="180" height="180"/>
+        <template
+          v-for="result in value"
+        >
+          <img
+            v-if="result.images[0]"
+            :src="result.images[0].url"
+            width="180"
+            height="180"
+          />
+          <div
+            v-else
+            class="fallback-artist"
+          >
+            <img src="~/assets/img/music-disc.png" class="userPicture" alt="">
+            <p>{{ result.name }}</p>
+          </div>
+        </template>
       </div>
     </div>
     <Suggestions
@@ -308,5 +324,20 @@ export default {
   a {
     color: #1DB954;
     text-decoration: underline;
+  }
+  .fallback-artist {
+    background-color: #282828;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 11.25rem;
+    height: 11.25rem;
+    padding: 1rem
+  }
+
+  .fallback-artist img {
+    margin-bottom: 1rem;
+    height: 4rem;
   }
 </style>
