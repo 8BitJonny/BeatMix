@@ -3,7 +3,7 @@
     <div class="searchContainer">
       <div>
         <multiselect
-          :max="8"
+          :max="12"
           id="search"
           ref="search"
           label="name"
@@ -124,7 +124,7 @@ export default {
 
         let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
 
-        tracks = this.removeBlacklistedTrackTypes(tracks)
+        tracks = this.removeBlacklistedTrackTypes(tracks);
 
         await this.addTracksToPlaylist(newPlaylist.data.id, tracks);
 
