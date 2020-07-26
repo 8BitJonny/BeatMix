@@ -38,4 +38,10 @@ export default {
 .product-hunt {
   @apply pr-8
 }
+
+@media screen and (max-width: 600px) {
+  .footer {
+    display: none
+  }
+}
 </style>
