@@ -1,12 +1,13 @@
-import axiosRetry, { isNetworkOrIdempotentRequestError } from "axios-retry";
+import axiosRetry, { isNetworkOrIdempotentRequestError, exponentialDelay } from "axios-retry";
 
 export default function ({ $axios, app }, inject) {
   axiosRetry($axios, {
     retries: 3,
+    retryDelay: exponentialDelay,
     retryCondition: (err) => {
       if (isNetworkOrIdempotentRequestError(err)) {
         return true
-      } else return err.config.method === 'post' && err.config.url.startsWith('/playlists');
+      } else return err.config.url.startsWith('/playlists') || err.config.url.startsWith('/albums');
     }
   });
   inject('spotifyApi', new SpotifyAPI($axios))
