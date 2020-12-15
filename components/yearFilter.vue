@@ -1,0 +1,159 @@
+<template>
+  <div>
+    <div
+      v-for="(_, index) in yearFilters"
+      class="filter-list-item"
+    >
+        <select
+          required
+          v-model="yearFilters[index].artist"
+          name="artist"
+          class="select artist-select"
+        >
+          <option selected disabled value="">
+            Select Artist
+          </option>
+          <option value="*">All Artists</option>
+          <option
+            v-for="artist in artists"
+            :value="artist.id">
+            {{ artist.name }}
+          </option>
+        </select>
+        :
+        <select
+          required
+          v-model="yearFilters[index].lowerBound"
+          name="start-year"
+          class="select year-select"
+        >
+          <option value="" disabled selected>
+            lower bound
+          </option>
+          <template v-for="year in yearOptions">
+            <option
+              v-if="yearFilters[index].upperBound ? year <= yearFilters[index].upperBound : true"
+              :value="year">
+              {{ year }}
+            </option>
+          </template>
+        </select>
+        -
+        <select
+          required
+          v-model="yearFilters[index].upperBound"
+          name="end-year"
+          class="select year-select"
+        >
+          <option value="" disabled selected>
+            upper bound
+          </option>
+          <template v-for="year in yearOptions">
+            <option
+              v-if="year >= yearFilters[index].lowerBound"
+              :value="year">
+              {{ year }}
+            </option>
+          </template>
+        </select>
+        <button
+          @click="() => deleteFilter(index)"
+          class="delete-filter-button"
+        >
+          <img
+            src="~/assets/img/icons8-delete.svg"
+            height="18px"
+            width="18px"
+          >
+        </button>
+    </div>
+    <button
+      v-if="yearFilters.length < artists.length"
+      @click="addFilter"
+      class="text-green"
+    >
+      Add year filter
+    </button>
+  </div>
+</template>
+
+<script>
+const currentYear = new Date().getFullYear();
+const years = [...Array(200).keys()].map(year => currentYear - year);
+
+export default {
+  name: 'yearFilter',
+  props: {
+    artists: {
+      type: Array,
+      default: []
+    }
+  },
+  data() {
+    return {
+      yearOptions: years,
+      yearFilters: []
+    }
+  },
+  methods: {
+    addFilter() {
+      this.yearFilters.push({ upperBound: "", lowerBound: "", artist: "" })
+    },
+    deleteFilter(index) {
+      this.yearFilters.splice(index, 1)
+    }
+  }
+}
+</script>
+
+<style scoped>
+.filter-list-item {
+  margin: 0 0 0.6rem;
+  display: flex;
+}
+
+.select {
+  padding: 3px;
+  border-radius: 4px;
+  background-color: #2E3838;
+  /*border: 3px solid #2E3838;*/
+  margin: 0 0.25rem;
+  /*background-color: transparent;*/
+  /*border-width: 3px;*/
+  @apply select-none outline-none text-white
+}
+
+.select option[disabled] {
+  display: none;
+}
+
+.artist-select {
+  width: 8rem;
+}
+
+.year-select {
+  width: 5.5rem;
+}
+
+.text-green {
+  color: #1DB954;
+  @apply select-none outline-none mt-2
+}
+
+.delete-filter-button {
+  transition: 0.70s;
+  -webkit-transition: 0.70s;
+  -moz-transition: 0.70s;
+  -ms-transition: 0.70s;
+  -o-transition: 0.70s;
+  @apply select-none outline-none
+}
+
+.delete-filter-button:hover {
+  -webkit-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  transform: rotate(90deg);
+}
+</style>

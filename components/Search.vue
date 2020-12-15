@@ -49,21 +49,12 @@
       class="desktop"
     />
     <div v-if="!success && value.length > 0" class="buttonWrapper">
-      <div class="createButton relative">
+      <div class="createButton">
         <button @click="createMixedArtistPlaylist" class="ld-ext-left" :class="{ running: loading }">
           {{ loading ? 'Creating' : 'Create Playlist' }}
           <div class="ld ld-ring ld-spin"></div>
         </button>
-        <button @click="settingsOpen = !settingsOpen">
-          <img
-            src="~/assets/img/gear.svg"
-            height="18px"
-            width="18px"
-          >
-        </button>
-        <settings
-          v-if="settingsOpen"
-        />
+        <settings :artists="value" />
       </div>
     </div>
   </div>
@@ -277,6 +268,13 @@ export default {
     box-shadow: 0 4px 4px #000000;
     @apply m-4
   }
+  .createButton .settings-button {
+    @apply px-3 py-3 select-none outline-none
+  }
+  .createButton .settings-button:hover {
+    background-color: #168D40;
+    @apply rounded-r-md
+  }
   @media (max-width: 1000px) {
     .searchResults {
       width: 636px;
@@ -311,12 +309,12 @@ export default {
     background-color: #1DB954;
     @apply rounded-md inline-flex select-none
   }
-  .createButton > button:nth-child(1) {
-    border-right: 2px solid #191414;
-    @apply px-4 py-2 select-none outline-none
+  .createButton > button:hover {
+    background-color: #168D40;
+    @apply rounded-l-md
   }
-  .createButton > button:nth-child(2) {
-    @apply px-3 py-1 select-none outline-none
+  .createButton > button:nth-child(1) {
+    @apply px-4 py-2 select-none outline-none font-bold
   }
   .buttonWrapper {
     @apply mt-8
