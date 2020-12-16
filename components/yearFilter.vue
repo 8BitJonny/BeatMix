@@ -7,6 +7,7 @@
         <select
           required
           v-model="yearFilters[index].artist"
+          @change="onArtistChange(index, $event.target.value)"
           name="artist"
           class="select artist-select"
         >
@@ -20,42 +21,44 @@
             {{ artist.name }}
           </option>
         </select>
-        :
-        <select
-          required
-          v-model="yearFilters[index].lowerBound"
-          name="start-year"
-          class="select year-select"
-        >
-          <option value="" disabled selected>
-            lower bound
-          </option>
-          <template v-for="year in yearOptions">
-            <option
-              v-if="yearFilters[index].upperBound ? year <= yearFilters[index].upperBound : true"
-              :value="year">
-              {{ year }}
+        <div v-if="yearFilters[index].artist">
+          :
+          <select
+            required
+            v-model="yearFilters[index].lowerBound"
+            name="start-year"
+            class="select year-select"
+          >
+            <option value="" disabled selected>
+              lower bound
             </option>
-          </template>
-        </select>
-        -
-        <select
-          required
-          v-model="yearFilters[index].upperBound"
-          name="end-year"
-          class="select year-select"
-        >
-          <option value="" disabled selected>
-            upper bound
-          </option>
-          <template v-for="year in yearOptions">
-            <option
-              v-if="year >= yearFilters[index].lowerBound"
-              :value="year">
-              {{ year }}
+            <template v-for="year in yearFilters[index].options">
+              <option
+                v-if="yearFilters[index].upperBound ? year <= yearFilters[index].upperBound : true"
+                :value="year">
+                {{ year }}
+              </option>
+            </template>
+          </select>
+          -
+          <select
+            required
+            v-model="yearFilters[index].upperBound"
+            name="end-year"
+            class="select year-select"
+          >
+            <option value="" disabled selected>
+              upper bound
             </option>
-          </template>
-        </select>
+            <template v-for="year in yearFilters[index].options">
+              <option
+                v-if="year >= yearFilters[index].lowerBound"
+                :value="year">
+                {{ year }}
+              </option>
+            </template>
+          </select>
+        </div>
         <button
           @click="() => deleteFilter(index)"
           class="delete-filter-button"
@@ -78,9 +81,6 @@
 </template>
 
 <script>
-const currentYear = new Date().getFullYear();
-const years = [...Array(200).keys()].map(year => currentYear - year);
-
 export default {
   name: 'yearFilter',
   props: {
@@ -91,16 +91,19 @@ export default {
   },
   data() {
     return {
-      yearOptions: years,
       yearFilters: []
     }
   },
   methods: {
     addFilter() {
-      this.yearFilters.push({ upperBound: "", lowerBound: "", artist: "" })
+      this.yearFilters.push({ options: [], upperBound: "", lowerBound: "", artist: "" });
     },
     deleteFilter(index) {
       this.yearFilters.splice(index, 1)
+    },
+    async onArtistChange(index, artist) {
+      this.yearFilters[index].options = await this.$store.dispatch('spotify/GET_ALBUM_YEAR_SPAN', { artist: { id: artist } })
+      this.yearFilters[index].upperBound = this.yearFilters[index].lowerBound = ""
     }
   }
 }

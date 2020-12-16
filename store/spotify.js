@@ -25,5 +25,14 @@ export const actions = {
       commit('PUSH_ALBUMS', { artist, albums: albumResponse.data.items });
       offset += 50;
     } while (albumResponse.data.next !== null);
+  },
+  GET_ALBUM_YEAR_SPAN({ state }, { artist }) {
+    const albums = state.albums[artist.id];
+    const getReleaseYear = album => album.release_date.split('-')[0];
+
+    const albumReleaseDates = albums.map(getReleaseYear);
+    const minYear = Math.min(...albumReleaseDates);
+    const maxYear = Math.max(...albumReleaseDates);
+    return [...Array(maxYear - minYear + 1).keys()].map(year => minYear + year - 1);
   }
 };
