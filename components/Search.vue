@@ -14,7 +14,7 @@
           :options="options"
           :hideSelected="true"
           :closeOnSelect=false
-          @select="() => { this.options = []; this.success = null }"
+          @select="onSelect"
           @search-change="delayedInput"
           placeholder='Select your beloved artists'
         >
@@ -83,6 +83,11 @@ export default {
     }
   },
   methods: {
+    onSelect: function(artist) {
+      this.options = [];
+      this.success = null;
+      this.$store.dispatch('spotify/FETCH_ALBUMS', { artist })
+    },
     delayedInput: function(event) {
       clearTimeout(this.timer);
       this.timer = 0;
@@ -163,23 +168,6 @@ export default {
           )
         ))
       )
-    },
-    async getAllAlbums(artists) {
-      const albums = [];
-
-      for (let index=0; index < artists.length; index++) {
-        const artist = artists[index];
-        let albumResponse;
-        let offset = 0;
-        do {
-          albumResponse = await this.$spotifyApi.getArtistAlbums(this.$store.state.token, artist.id, this.$store.state.user.country, offset);
-          albums.push(...albumResponse.data.items);
-          offset += 50;
-        } while (albumResponse.data.next !== null);
-        offset = 0
-      }
-
-      return albums
     },
     async getAllTracks(albums) {
       let trackPromises = [],
