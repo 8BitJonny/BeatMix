@@ -122,22 +122,19 @@ export default {
     createMixedArtistPlaylist: async function () {
       try {
         this.loading = true;
-        let albums = await this.getAllAlbums(this.value);
+        const albumsPerArtist = this.$store.state.spotify.albums;
 
-        let tracks = await this.getAllTracks(albums);
+        let allAlbums = Object
+          .keys(albumsPerArtist)
+          .flatMap(artistID => this.applyYearFilter(artistID, albumsPerArtist[artistID]));
 
+        let tracks = await this.getAllTracks(allAlbums);
         tracks = this.filterOutTracksFromNotWantedArtists(tracks);
-
-        tracks = tracks.map(el => {
-          el.duration_ms = Math.floor(el.duration_ms / 1000);
-          return el
-        });
+        tracks.forEach(track => (track.duration_ms = Math.floor(track.duration_ms / 1000)));
         tracks = this.filterDuplicates(tracks, ['name', 'duration_ms']);
-
-        let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
-
         tracks = this.removeBlacklistedTrackTypes(tracks);
 
+        let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
         await this.addTracksToPlaylist(newPlaylist.data.id, tracks);
 
         this.loading = false;
@@ -159,7 +156,23 @@ export default {
         this.loading = false;
       }
     },
-    filterDuplicates: function(array, matchProperties) {
+    applyYearFilter(artistID, albums) {
+      const getReleaseYear = album => album.release_date.split('-')[0];
+      const findFilter = condition => this.$store.state.settings.yearFilters.find(condition);
+      const findDirectArtistFilter = artistID => findFilter(filter => filter.artist === artistID);
+      const findCatchAllYearFilter = _ => findFilter(filter => filter.artist === `*`);
+      const findApplicableYearFilter = artistID => findDirectArtistFilter(artistID) || findCatchAllYearFilter() || null;
+
+      const yearFilter = findApplicableYearFilter(artistID);
+      if (!yearFilter) return albums;
+
+      return albums.filter(album => {
+        const releaseYear = getReleaseYear(album);
+        return releaseYear >= yearFilter.lowerBound
+          && releaseYear <= yearFilter.upperBound;
+      });
+    },
+    filterDuplicates(array, matchProperties) {
       return array.filter((elem, index, self) =>
         index === self.findIndex((t) => (
           this.allEqual(
