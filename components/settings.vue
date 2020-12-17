@@ -39,11 +39,8 @@
       v-if="bigSettingsModal"
       class="big-settings-modal"
     >
-      <div
-        class="model-overlay"
-        @click="bigSettingsModal = false"
-      />
-      <div class="model-body">
+      <div class="model-overlay" />
+      <form class="model-body" @submit.prevent="closeBothModals">
         <h2>Settings</h2>
         <h3>Blacklist</h3>
           <div
@@ -69,13 +66,13 @@
         <div class="remaining-height" />
         <div class="modal-footer">
           <button
-            @click="bigSettingsModal = false"
             class="green-button"
+            type="submit"
           >
             Save
           </button>
         </div>
-      </div>
+      </form>
     </div>
   </div>
 </template>
@@ -126,6 +123,9 @@ export default {
   methods: {
     handleInput() {
       this.$store.commit('settings/SET_FILTER', this.checked)
+    },
+    closeBothModals() {
+      this.settingsOpen = this.bigSettingsModal = false;
     }
   }
 }

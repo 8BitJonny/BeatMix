@@ -62,6 +62,7 @@
         <button
           @click="() => deleteFilter(index)"
           class="delete-filter-button"
+          type="button"
         >
           <img
             src="~/assets/img/icons8-delete.svg"
@@ -74,6 +75,7 @@
       v-if="yearFilters.length < artists.length"
       @click="addFilter"
       class="text-green"
+      type="button"
     >
       Add year filter
     </button>
