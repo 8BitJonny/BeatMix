@@ -1,14 +1,18 @@
 <template>
   <div>
     <div class="relative">
-      <button class="settings-button" @click="settingsOpen = !settingsOpen">
+      <button class="settings-button" @click="settingsOpen = true">
         <img
           src="~/assets/img/gear.svg"
           height="18px"
           width="18px"
         >
       </button>
-      <div class="settings-wrapper" v-if="settingsOpen">
+      <div
+        v-if="settingsOpen && !bigSettingsModal"
+        v-click-outside="closeBothModals"
+        class="settings-wrapper"
+      >
         <div
           v-for="option in options"
           :key="option.value"
@@ -28,7 +32,7 @@
           <br>
         </div>
         <button
-          @click="bigSettingsModal = !bigSettingsModal"
+          @click="bigSettingsModal = true"
           class="show_more_settings_button"
         >
           Show more settings
@@ -62,7 +66,8 @@
             <br>
           </div>
         <h3>Year Filter</h3>
-        <YearFilter :artists="artists" />
+        <YearFilter :artists="artists"/>
+
         <div class="remaining-height" />
         <div class="modal-footer">
           <button
@@ -78,10 +83,14 @@
 </template>
 
 <script>
+import vClickOutside from 'v-click-outside'
 import YearFilter from '~/components/yearFilter'
 
 export default {
   name: "settings",
+  directives: {
+    clickOutside: vClickOutside.directive
+  },
   components: {
     YearFilter,
   },
