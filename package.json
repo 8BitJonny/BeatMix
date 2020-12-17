@@ -14,7 +14,7 @@
     "deploy": "gh-pages -t -d dist"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.3.6",
+    "@nuxtjs/axios": "^5.12.2",
     "@nuxtjs/tailwindcss": "^1.0.0",
     "axios-retry": "^3.1.2",
     "cookie-parser": "^1.4.4",
