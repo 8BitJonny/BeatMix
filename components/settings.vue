@@ -112,7 +112,7 @@ export default {
   },
   computed: {
     filters() {
-      return this.$store.state.filters
+      return this.$store.state.settings.filters
     }
   },
   watch: {
@@ -125,7 +125,7 @@ export default {
   },
   methods: {
     handleInput() {
-      this.$store.commit('SET_FILTER', this.checked)
+      this.$store.commit('settings/SET_FILTER', this.checked)
     }
   }
 }

@@ -198,7 +198,7 @@ export default {
       return await this.$spotifyApi.createPlaylist(this.$store.state.token, this.$store.state.user.id, name);
     },
     removeBlacklistedTrackTypes(tracks) {
-      const regex = this.$store.state.filters
+      const regex = this.$store.state.settings.filters
         .map(filter => {
           switch (filter) {
             case 'live':
