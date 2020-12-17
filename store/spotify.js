@@ -26,13 +26,18 @@ export const actions = {
       offset += 50;
     } while (albumResponse.data.next !== null);
   },
-  GET_ALBUM_YEAR_SPAN({ state }, { artist }) {
-    const albums = state.albums[artist.id];
+  GET_ALBUM_YEAR_SPAN({ state }, { artist: { id } }) {
     const getReleaseYear = album => album.release_date.split('-')[0];
+    const getAllAlbums = _ => Object.keys(state.albums).flatMap(artistID => state.albums[artistID]);
+    const getArtistAlbums = artistID => state.albums[artistID];
+
+    const albums = id === '*'
+     ? getAllAlbums()
+     : getArtistAlbums(id);
 
     const albumReleaseDates = albums.map(getReleaseYear);
     const minYear = Math.min(...albumReleaseDates);
     const maxYear = Math.max(...albumReleaseDates);
-    return [...Array(maxYear - minYear + 1).keys()].map(year => minYear + year - 1);
+    return [...Array(maxYear - minYear + 1).keys()].map(year => minYear + year);
   }
 };
