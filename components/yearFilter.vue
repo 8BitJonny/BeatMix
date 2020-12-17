@@ -6,7 +6,7 @@
     >
         <select
           required
-          v-model="yearFilters[index].artist"
+          :value="yearFilters[index].artist"
           @change="onArtistChange(index, $event.target.value)"
           name="artist"
           class="select artist-select"
@@ -25,7 +25,8 @@
           :
           <select
             required
-            v-model="yearFilters[index].lowerBound"
+            :value="yearFilters[index].lowerBound"
+            @change="onYearChange(index, $event.target.value, 'lowerBound')"
             name="start-year"
             class="select year-select"
           >
@@ -43,7 +44,8 @@
           -
           <select
             required
-            v-model="yearFilters[index].upperBound"
+            :value="yearFilters[index].upperBound"
+            @change="onYearChange(index, $event.target.value, 'upperBound')"
             name="end-year"
             class="select year-select"
           >
@@ -91,21 +93,40 @@ export default {
       default: []
     }
   },
-  data() {
-    return {
-      yearFilters: []
+  computed: {
+    yearFilters() {
+      return this.$store.state.settings.yearFilters
     }
   },
   methods: {
     addFilter() {
-      this.yearFilters.push({ options: [], upperBound: "", lowerBound: "", artist: "" });
+      this.$store.commit('settings/ADD_YEAR_FILTER', {
+        options: [],
+        upperBound: "",
+        lowerBound: "",
+        artist: "",
+      });
     },
     deleteFilter(index) {
-      this.yearFilters.splice(index, 1)
+      this.$store.commit('settings/DELETE_YEAR_FILTER', index);
     },
     async onArtistChange(index, artist) {
-      this.yearFilters[index].options = await this.$store.dispatch('spotify/GET_ALBUM_YEAR_SPAN', { artist: { id: artist } })
-      this.yearFilters[index].upperBound = this.yearFilters[index].lowerBound = ""
+      this.$store.commit('settings/UPDATE_YEAR_FILTER', {
+        index,
+        updateObj: {
+          artist,
+          options: await this.$store.dispatch('spotify/GET_ALBUM_YEAR_SPAN', { artist: { id: artist } }),
+          upperBound: this.yearFilters[index].lowerBound = ""
+        }
+      });
+    },
+    onYearChange(index, year, property) {
+      this.$store.commit('settings/UPDATE_YEAR_FILTER', {
+        index,
+        updateObj: {
+          [property]: year,
+        }
+      });
     }
   }
 }
