@@ -143,7 +143,7 @@ export default {
           duration: 5000,
           type: 'success',
           group: 'success',
-          text: newPlaylist.data.external_urls.spotify
+          text: 'Successfully created your Playlist,\n check into your Spotify Account to enjoy it.'
         });
       } catch(err) {
         this.$notify({
@@ -242,6 +242,17 @@ export default {
     allEqual: (arr, matcher) => arr.every( v => v === matcher )
   },
   mounted() {
+    if (!localStorage.getItem('notifiedAboutYearFilter') &&
+      new Date().getTime() < new Date('01.02.2020').getTime()) {
+      localStorage.setItem('notifiedAboutYearFilter', 'true');
+      this.$notify({
+        duration: 60000,
+        type: 'success',
+        group: 'success',
+        text: 'Hey, good news! Now you also have the ability to filter the artists tracks by years. Just open the settings during playlist creation and get started. Have fun and enjoy!'
+      });
+    }
+
     setTimeout(() => {
       document.querySelector('.searchContainer input').focus();
     }, 200);
