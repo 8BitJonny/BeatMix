@@ -109,11 +109,7 @@ export default {
         { label: 'Exlude Live Tracks', value: 'live'},
         { label: 'Exlude Instrumental Tracks', value: 'instrumental'},
         { label: 'Exlude Commentary Tracks', value: 'commentary'}
-      ],
-      yearFilter: {
-        lowerBound: null,
-        upperBound: null
-      }
+      ]
     }
   },
   computed: {
