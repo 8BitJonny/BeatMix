@@ -1,13 +1,14 @@
 <template>
   <div>
+    <script data-name="BMC-Widget" src="https://cdnjs.buymeacoffee.com/1.0.0/widget.prod.min.js" data-id="8BitJonny" data-description="Support me on Buy me a coffee!" data-message="If you enjoy BeatMix and want to show that you can buy me a pizza!" data-color="#FFDD00" data-position="Right" data-x_margin="18" data-y_margin="18"></script>
     <notifications width="434px" position="top center" group="error">
-      <template slot="body" slot-scope="props">
+      <template slot="body" slot-scope="props" @click.native="props.close">
         <ErrorMessage :text="props.item.text" />
       </template>
     </notifications>
     <notifications width="350px" position="top center" group="success">
       <template slot="body" slot-scope="props">
-        <SuccessMessage />
+        <SuccessMessage :text="props.item.text" @click.native="props.close" />
       </template>
     </notifications>
     <TheNavBar />

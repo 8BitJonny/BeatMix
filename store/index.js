@@ -1,7 +1,6 @@
 export const state = () => ({
   user: null,
   token: null,
-  filters: ['commentary', 'instrumental', 'live'],
   timeout: null
 });
 
@@ -11,9 +10,6 @@ export const mutations = {
   },
   SET_TOKEN(state, token) {
     state.token = token
-  },
-  SET_FILTER(state, filters) {
-    state.filters = filters
   },
   SET_TIMEOUT(state, timeout) {
     state.timeout = timeout
