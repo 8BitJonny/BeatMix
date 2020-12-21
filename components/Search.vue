@@ -244,7 +244,7 @@ export default {
   },
   mounted() {
     if (!localStorage.getItem('notifiedAboutYearFilter') &&
-      new Date().getTime() < new Date('01.02.2020').getTime()) {
+      new Date().getTime() < new Date('01.02.2021').getTime()) {
       localStorage.setItem('notifiedAboutYearFilter', 'true');
       this.$notify({
         duration: 60000,
