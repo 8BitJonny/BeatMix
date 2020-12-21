@@ -137,6 +137,7 @@ export default {
         let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
         await this.addTracksToPlaylist(newPlaylist.data.id, tracks);
 
+        this.$store.commit('settings/RESET_YEAR_FILTER');
         this.loading = false;
         this.success = true;
         this.$notify({

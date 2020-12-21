@@ -15,5 +15,8 @@ export const mutations = {
   },
   DELETE_YEAR_FILTER(state, yearFilterIndex) {
     state.yearFilters.splice(yearFilterIndex, 1)
+  },
+  RESET_YEAR_FILTER(state) {
+    state.yearFilters = []
   }
 };
