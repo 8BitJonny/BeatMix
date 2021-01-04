@@ -14,7 +14,7 @@
           :options="options"
           :hideSelected="true"
           :closeOnSelect=false
-          @select="() => { this.options = []; this.success = null }"
+          @select="onSelect"
           @search-change="delayedInput"
           placeholder='Select your beloved artists'
         >
@@ -49,21 +49,12 @@
       class="desktop"
     />
     <div v-if="!success && value.length > 0" class="buttonWrapper">
-      <div class="createButton relative">
+      <div class="createButton">
         <button @click="createMixedArtistPlaylist" class="ld-ext-left" :class="{ running: loading }">
           {{ loading ? 'Creating' : 'Create Playlist' }}
           <div class="ld ld-ring ld-spin"></div>
         </button>
-        <button @click="settingsOpen = !settingsOpen">
-          <img
-            src="~/assets/img/gear.svg"
-            height="18px"
-            width="18px"
-          >
-        </button>
-        <settings
-          v-if="settingsOpen"
-        />
+        <settings :artists="value" />
       </div>
     </div>
   </div>
@@ -92,6 +83,11 @@ export default {
     }
   },
   methods: {
+    onSelect: function(artist) {
+      this.options = [];
+      this.success = null;
+      this.$store.dispatch('spotify/FETCH_ALBUMS', { artist })
+    },
     delayedInput: function(event) {
       clearTimeout(this.timer);
       this.timer = 0;
@@ -126,31 +122,29 @@ export default {
     createMixedArtistPlaylist: async function () {
       try {
         this.loading = true;
-        let albums = await this.getAllAlbums(this.value);
+        const albumsPerArtist = this.$store.state.spotify.albums;
 
-        let tracks = await this.getAllTracks(albums);
+        let allAlbums = Object
+          .keys(albumsPerArtist)
+          .flatMap(artistID => this.applyYearFilter(artistID, albumsPerArtist[artistID]));
 
+        let tracks = await this.getAllTracks(allAlbums);
         tracks = this.filterOutTracksFromNotWantedArtists(tracks);
-
-        tracks = tracks.map(el => {
-          el.duration_ms = Math.floor(el.duration_ms / 1000);
-          return el
-        });
+        tracks.forEach(track => (track.duration_ms = Math.floor(track.duration_ms / 1000)));
         tracks = this.filterDuplicates(tracks, ['name', 'duration_ms']);
-
-        let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
-
         tracks = this.removeBlacklistedTrackTypes(tracks);
 
+        let newPlaylist = await this.createPlaylist(this.value.map(artist => artist.name).join(', '));
         await this.addTracksToPlaylist(newPlaylist.data.id, tracks);
 
+        this.$store.commit('settings/RESET_YEAR_FILTER');
         this.loading = false;
         this.success = true;
         this.$notify({
           duration: 5000,
           type: 'success',
           group: 'success',
-          text: newPlaylist.data.external_urls.spotify
+          text: 'Successfully created your Playlist,\n check into your Spotify Account to enjoy it.'
         });
       } catch(err) {
         this.$notify({
@@ -163,7 +157,23 @@ export default {
         this.loading = false;
       }
     },
-    filterDuplicates: function(array, matchProperties) {
+    applyYearFilter(artistID, albums) {
+      const getReleaseYear = album => album.release_date.split('-')[0];
+      const findFilter = condition => this.$store.state.settings.yearFilters.find(condition);
+      const findDirectArtistFilter = artistID => findFilter(filter => filter.artist === artistID);
+      const findCatchAllYearFilter = _ => findFilter(filter => filter.artist === `*`);
+      const findApplicableYearFilter = artistID => findDirectArtistFilter(artistID) || findCatchAllYearFilter() || null;
+
+      const yearFilter = findApplicableYearFilter(artistID);
+      if (!yearFilter) return albums;
+
+      return albums.filter(album => {
+        const releaseYear = getReleaseYear(album);
+        return releaseYear >= yearFilter.lowerBound
+          && releaseYear <= yearFilter.upperBound;
+      });
+    },
+    filterDuplicates(array, matchProperties) {
       return array.filter((elem, index, self) =>
         index === self.findIndex((t) => (
           this.allEqual(
@@ -172,23 +182,6 @@ export default {
           )
         ))
       )
-    },
-    async getAllAlbums(artists) {
-      const albums = [];
-
-      for (let index=0; index < artists.length; index++) {
-        const artist = artists[index];
-        let albumResponse;
-        let offset = 0;
-        do {
-          albumResponse = await this.$spotifyApi.getArtistAlbums(this.$store.state.token, artist.id, this.$store.state.user.country, offset);
-          albums.push(...albumResponse.data.items);
-          offset += 50;
-        } while (albumResponse.data.next !== null);
-        offset = 0
-      }
-
-      return albums
     },
     async getAllTracks(albums) {
       let trackPromises = [],
@@ -219,7 +212,7 @@ export default {
       return await this.$spotifyApi.createPlaylist(this.$store.state.token, this.$store.state.user.id, name);
     },
     removeBlacklistedTrackTypes(tracks) {
-      const regex = this.$store.state.filters
+      const regex = this.$store.state.settings.filters
         .map(filter => {
           switch (filter) {
             case 'live':
@@ -250,6 +243,17 @@ export default {
     allEqual: (arr, matcher) => arr.every( v => v === matcher )
   },
   mounted() {
+    if (!localStorage.getItem('notifiedAboutYearFilter') &&
+      new Date().getTime() < new Date('01.02.2021').getTime()) {
+      localStorage.setItem('notifiedAboutYearFilter', 'true');
+      this.$notify({
+        duration: 60000,
+        type: 'success',
+        group: 'success',
+        text: 'Hey, good news! Now you also have the ability to filter the artists tracks by years. Just open the settings during playlist creation and get started. Have fun and enjoy!'
+      });
+    }
+
     setTimeout(() => {
       document.querySelector('.searchContainer input').focus();
     }, 200);
@@ -276,6 +280,13 @@ export default {
     height: 180px;
     box-shadow: 0 4px 4px #000000;
     @apply m-4
+  }
+  .createButton .settings-button {
+    @apply px-3 py-3 select-none outline-none
+  }
+  .createButton .settings-button:hover {
+    background-color: #168D40;
+    @apply rounded-r-md
   }
   @media (max-width: 1000px) {
     .searchResults {
@@ -311,12 +322,12 @@ export default {
     background-color: #1DB954;
     @apply rounded-md inline-flex select-none
   }
-  .createButton > button:nth-child(1) {
-    border-right: 2px solid #191414;
-    @apply px-4 py-2 select-none outline-none
+  .createButton > button:hover {
+    background-color: #168D40;
+    @apply rounded-l-md
   }
-  .createButton > button:nth-child(2) {
-    @apply px-3 py-1 select-none outline-none
+  .createButton > button:nth-child(1) {
+    @apply px-4 py-2 select-none outline-none font-bold
   }
   .buttonWrapper {
     @apply mt-8
