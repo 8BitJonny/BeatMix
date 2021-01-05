@@ -22,7 +22,7 @@
     "crypto-js": "^3.3.0",
     "express": "^4.16.4",
     "gh-pages": "^2.2.0",
-    "nuxt": "^2.14.8",
+    "nuxt": "^2.14.11",
     "querystring": "^0.2.0",
     "v-click-outside": "^3.1.2",
     "vue-multiselect": "^2.1.6",
