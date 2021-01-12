@@ -27,7 +27,7 @@ export const actions = {
     } while (albumResponse.data.next !== null);
   },
   GET_ALBUM_YEAR_SPAN({ state }, { artist: { id } }) {
-    const getReleaseYear = album => album.release_date.split('-')[0];
+    const getReleaseYear = album => Number(album.release_date.split('-')[0]);
     const getAllAlbums = _ => Object.keys(state.albums).flatMap(artistID => state.albums[artistID]);
     const getArtistAlbums = artistID => state.albums[artistID];
 
@@ -35,7 +35,10 @@ export const actions = {
      ? getAllAlbums()
      : getArtistAlbums(id);
 
-    const albumReleaseDates = albums.map(getReleaseYear);
+    const albumReleaseDates = albums
+      .map(getReleaseYear)
+      .filter(e => typeof e === "number" && !isNaN(e) && e > 1800);
+
     const minYear = Math.min(...albumReleaseDates);
     const maxYear = Math.max(...albumReleaseDates);
     return [...Array(maxYear - minYear + 1).keys()].map(year => minYear + year);
