@@ -143,7 +143,7 @@ export default {
   border: 1px solid #282323;
   background: #191414;
   box-shadow: 0 4px 4px #000000;
-  @apply text-white text-left whitespace-no-wrap mb-2 p-2 right-0 absolute select-none outline-none
+  @apply text-white text-left whitespace-nowrap mb-2 p-2 right-0 absolute select-none outline-none
 }
 
 .big-settings-modal {
