@@ -1,6 +1,6 @@
 {
   "name": "beatmix",
-  "version": "1.0.0",
+  "version": "1.1.1",
   "description": "BeatMix - Artist Mixer. Your favourite artists in one playlist within seconds",
   "author": "8BitJonny",
   "homepage": "https://beatmix.app",
@@ -14,16 +14,17 @@
     "deploy": "gh-pages -t -d dist"
   },
   "dependencies": {
-    "@nuxtjs/axios": "^5.3.6",
-    "@nuxtjs/tailwindcss": "^1.0.0",
+    "@nuxtjs/axios": "^5.12.3",
+    "@nuxtjs/tailwindcss": "4.0.0",
     "axios-retry": "^3.1.9",
-    "cookie-parser": "^1.4.4",
+    "cookie-parser": "^1.4.5",
     "cross-env": "^5.2.0",
-    "crypto-js": "^3.2.1",
+    "crypto-js": "^4.0.0",
     "express": "^4.16.4",
     "gh-pages": "^2.2.0",
-    "nuxt": "^2.12.0",
+    "nuxt": "^2.15.3",
     "querystring": "^0.2.0",
+    "v-click-outside": "^3.1.2",
     "vue-multiselect": "^2.1.6",
     "vue-notification": "^1.3.20"
   },

@@ -1,13 +1,15 @@
 <template>
   <div class="vue-notification success">
-    Successfully created your Playlist,<br>
-    check into your Spotify Account to enjoy it.
+    {{ text }}
   </div>
 </template>
 
 <script>
 export default {
-  name: "successNotification"
+  name: "successNotification",
+  props: {
+    text: String
+  }
 }
 </script>
 
