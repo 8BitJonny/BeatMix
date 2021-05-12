@@ -48,10 +48,12 @@ export default {
       window.location = url;
 
       //location.assign(`/login?redirect_uri=${this.getBaseUrl()}/auth/callback`)
+      umami.trackEvent('Login', 'click');
     },
     logout: function() {
       this.$store.dispatch('LOGOUT');
       //location.assign("/logout")
+      umami.trackEvent('Logout', 'click');
     },
     getBaseUrl() {
       return `${window.location.protocol}//${window.location.host}`
