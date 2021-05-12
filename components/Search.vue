@@ -146,6 +146,7 @@ export default {
           group: 'success',
           text: 'Successfully created your Playlist,\n check into your Spotify Account to enjoy it.'
         });
+        umami.trackEvent('Create Playlist', 'click');
       } catch(err) {
         this.$notify({
           duration: 9000,
@@ -155,6 +156,7 @@ export default {
         });
         console.log("Error: ", err);
         this.loading = false;
+        umami.trackEvent('Create Playlist', 'error');
       }
     },
     applyYearFilter(artistID, albums) {

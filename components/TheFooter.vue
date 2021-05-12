@@ -3,6 +3,7 @@
       <a
         href="https://github.com/8BitJonny/Spotify-Artist-Mixer"
         class="github-logo"
+        @click="trackEvent('Github Link')"
       >
         <img
           src="~/assets/img/GitHub-Mark-Light-120px-plus.png"
@@ -12,6 +13,7 @@
       <a
         href="https://www.producthunt.com/posts/beatmix?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-beatmix"
         target="_blank"
+        @click="trackEvent('PH Link')"
       >
         <img
           src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=187013&theme=light"
@@ -26,7 +28,12 @@
 
 <script>
 export default {
-  name: 'TheFooter'
+  name: 'TheFooter',
+  methods: {
+    trackEvent(e) {
+      umami.trackEvent(e, 'click')
+    }
+  }
 }
 </script>
 

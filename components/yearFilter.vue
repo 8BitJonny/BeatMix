@@ -106,6 +106,7 @@ export default {
         lowerBound: "",
         artist: "",
       });
+      umami.trackEvent('Add Year Filter', 'settings');
     },
     deleteFilter(index) {
       this.$store.commit('settings/DELETE_YEAR_FILTER', index);

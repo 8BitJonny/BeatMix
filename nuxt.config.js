@@ -17,6 +17,15 @@ module.exports = {
     ],
     link: [
       { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+    ],
+    script: [
+      {
+        src: "https://umami-a7759d-production.up.railway.app/umami.js",
+        async: true,
+        defer: true,
+        "data-domains": "beatmix.app",
+        "data-website-id": "8765705c-55a9-4384-b5de-8c966b275704"
+      }
     ]
   },
   env: {
