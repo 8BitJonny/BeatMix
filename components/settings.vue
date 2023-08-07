@@ -22,7 +22,7 @@
             :id="option.value"
             :value="option.value"
             v-model="checked"
-            @change="handleInput(option.value)"
+            @change="handleInput"
           >
           <label
             :for="option.value"
@@ -56,7 +56,7 @@
               :id="option.value"
               :value="option.value"
               v-model="checked"
-              @change="handleInput(option.value)"
+              @change="handleInput"
             >
             <label
               :for="option.value"
@@ -126,12 +126,8 @@ export default {
     this.checked = this.filters
   },
   methods: {
-    handleInput(v) {
-      this.$store.commit('settings/SET_FILTER', this.checked);
-      umami.trackEvent(this.capitalizeFirstLetter(v), 'settings');
-    },
-    capitalizeFirstLetter(string) {
-      return string.toString().charAt(0).toUpperCase() + string.toString().slice(1);
+    handleInput() {
+      this.$store.commit('settings/SET_FILTER', this.checked)
     },
     closeBothModals() {
       this.settingsOpen = this.bigSettingsModal = false;
