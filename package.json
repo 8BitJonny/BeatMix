@@ -19,7 +19,7 @@
     "axios-retry": "^3.1.9",
     "cookie-parser": "^1.4.5",
     "cross-env": "^5.2.0",
-    "crypto-js": "^4.0.0",
+    "crypto-js": "^4.2.0",
     "express": "^4.16.4",
     "gh-pages": "^2.2.0",
     "nuxt": "^2.15.3",
